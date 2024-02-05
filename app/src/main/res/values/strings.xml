@@ -1,0 +1,187 @@
+<resources>
+    <string name="app_name">Second VPN - Lite</string>
+    <string name="start_msg_title">Thank you for using Second VPN - Lite</string>
+    <string name="start_msg_text">Please be aware that this tool should be used by people with knowledge about. We are not responsible for my use of it. Know that this app is still in testing, bugs may occur!</string>
+    <string name="error_request_permission">Error on getting permissions</string>
+    <string name="ok">OK</string>
+    <string name="cancel">Cancel</string>
+    <string name="payload">Payload</string>
+    <string name="method_connection">Method Connection</string>
+    <string name="proxy_remote">Proxy Remote</string>
+    <string name="no_value">No value</string>
+    <string name="start">Start</string>
+    <string name="force_stop">Force stop</string>
+    <string name="starting">Starting</string>
+    <string name="starting_notification">Starting services...</string>
+    <string name="connected_notification">VPN is active!</string>
+    <string name="stop">Stop</string>
+    <string name="disconnected">Disconnected</string>
+    <string name="no_network">No network</string>
+    <string name="serverssh">SSH Server and port (Ex.: 127.0.0.1:22)</string>
+    <string name="serverproxy">Proxy IP and port (Ex.: 127.0.0.1:80)</string>
+    <string name="userandpass">User and password (Ex.: user@pass)</string>
+    <string name="sni">Custom SNI (Ex.: web.whatsapp.com)</string>
+    <string name="payload_after_tls">Payload after TLS</string>
+    <string name="is_direct_mode">Direct Mode</string>
+    <string name="empty_configs">Empty,wrong or incomplete connection configuration!</string>
+    <string name="block_by_config_author">Function blocked by configuration creator</string>
+    <string name="empty_configs_export">Please complete the settings correctly before exporting</string>
+    <string name="app_mobile_info">App Version: %1$s %2$s</string>
+    <string name="state_starting">Getting Started</string>
+    <string name="state_connecting">Connecting</string>
+    <string name="state_wait">Waiting for server response</string>
+    <string name="state_auth">By authenticating</string>
+    <string name="state_get_config">Getting client configuration</string>
+    <string name="state_assign_ip">Assigning IP addresses</string>
+    <string name="state_add_routes">Adding routes</string>
+    <string name="state_connected_txt">Connected!</string>
+    <string name="state_disconnected">Disconnected</string>
+    <string name="state_reconnecting">Reconnecting</string>
+    <string name="state_stopping">Stopping</string>
+    <string name="state_noprocess">Not running</string>
+    <string name="state_resolve">Resolving host names</string>
+    <string name="state_tcp_connect">Connecting (TCP)</string>
+    <string name="state_auth_failed">Authentication failed</string>
+    <string name="state_nonetwork">Waiting for network...</string>
+    <string name="state_waitconnectretry">Waiting %ss seconds between connection attempt</string>
+    <string name="state_auth_pending">Waiting for Autentication</string>
+    <string name="state_user_vpn_password" translatable="false">Waiting for user VPN password</string>
+    <string name="state_user_vpn_permission" translatable="false">Waiting for user permission to use VPN API</string>
+    <string name="state_user_vpn_password_cancelled" translatable="false">VPN password input dialog cancelled</string>
+    <string name="state_user_vpn_permission_cancelled" translatable="false">VPN API permission dialog cancelled</string>
+    <string name="unknown_state">Unknown Status</string>
+    <string name="no_vpn_support_image">Your image does not support the VPNService API, sorry :(</string>
+    <string name="state_proxy_running">Running proxy</string>
+    <string name="state_proxy_inject">Injecting...</string>
+    <string name="service_connect_server">Connected to the server!</string>
+    <string name="state_no_internet">Warning: There is no network</string>
+    <string name="state_auth_success">Authenticated</string>
+    <string name="developed_by">Developed by One Host Apps</string>
+    <string name="about">About</string>
+    <string name="about_subtile">Second VPN - Lite is a simple SSH client</string>
+    <string name="about_text">This app allows,through a custom payload,\nyou connect to an external ssh server.\nHTTP (Direct or Proxy) and \nHTTPS (With or without payload after TLS)\nheaders are currently supported.</string>
+    <string name="about_text2">Besides the VPN remains active after drops\nand connections, this client supports\nmultiple HTTP header statuses. Regardless\nof the HTTP response, it will try\nto complete the connection</string>
+    <string name="about_text3">This is the simplest, lightest and most functional VPN client you will ever see!</string>
+    <string name="exit">Exit</string>
+    <string name="only_disconnected">Function available only when disconnected</string>
+    <string name="only_mobile_data_toast">Blocked for use on WiFi network</string>
+
+    <string name="minimize">Minimize</string>
+    <string name="export_file">Export file</string>
+    <string name="import_file">Import file</string>
+
+    <string name="export_sucess">File exported successfully!</string>
+    <string name="import_sucess">File imported successfully!</string>
+    <string name="file_config_incompatible">Configuration file incompatible!</string>
+
+    <string name="settings">Settings</string>
+    <string name="udp_settings">UDP settings</string>
+    <string name="enable_udp">Enable UDP</string>
+    <string name="type_udp">Type UDP address</string>
+    <string name="dns_settings">DNS settings</string>
+    <string name="enable_dns">Enable DNS forwarding</string>
+    <string name="type_dns_1">Type primary DNS</string>
+    <string name="type_dns_2">Type secondary DNS</string>
+    <string name="tls_settings">TLS settings</string>
+    <string name="tls_version_title">Version of TLS</string>
+    <string name="tls_version">Click to set TLS Version</string>
+    <string name="tethering_settings">Tethering settings</string>
+    <string name="enable_tethering">Enable tethering (no root)</string>
+    <string name="enable_tethering_root">Enable tethering (root)</string>
+    <string name="other_settings">Other settings</string>
+    <string name="connection_options">Connection options</string>
+    <string name="disable_tcp_delay">Disable TCP Delay</string>
+    <string name="enable_ssh_compress">Enable SSH Compress</string>
+    <string name="enable_wakelock">Enable wakelock</string>
+    <string name="enable_notifications">Enable notifications</string>
+
+    <string name="tethering_info">Tethering informations:</string>
+    <string name="tethering_ip">IP: </string>
+    <string name="tethering_port">Port: </string>
+    <string name="tethering_stopped">Tethering stopped</string>
+    <string name="hostpot_isOFF">Your access point appears to be disabled. Please enable it to share the VPN correctly!</string>
+    <string name="hostpot_error">Unable to start internet sharing (Hotspot)</string>
+    <string name="tethering_root_enable">Tethering (root) is running</string>
+    <string name="tethering_root_stoppped">Tethering (root) as stopped</string>
+    <string name="tethering_root_not_avaliable">Tethering (root) is not avaliable at moment :(</string>
+
+    <string name="export_file_name">File name</string>
+    <string name="export_file_name_set">Set config file name</string>
+    <string name="export_config_lock">Lock config from edition</string>
+    <string name="export_config_lock_settings">Lock settings (DNS,UDP,Tethering) in config</string>
+    <string name="export_config_lock_login">Lock login edit</string>
+    <string name="only_mobile_data">Only mobile data</string>
+    <string name="set_validate_date">Set validate date</string>
+    <string name="export_conf">Export</string>
+    <string name="filename_empty">The file name must not be empty</string>
+    <string name="config_msg">Config message (HTML support)</string>
+    <string name="config_msg_input">Set config message</string>
+    <string name="error_date_selected_invalid">Invalid date</string>
+    <string name="request_permission_ok">Permission granted!</string>
+    <string name="erro_save_file">Error to save config file!</string>
+    <string name="save_file_title">File saved in Downloads folder!</string>
+    <string name="save_file_msg">You config file named with CONFIG_NAME will be saved in the download folder. If you want, you can share it here too!</string>
+    <string name="save_file_share">Share my config file</string>
+    <string name="save_file_ok">OK</string>
+    <string name="import_file_error">Error on import config file</string>
+    <string name="import_file_sucess">Sucess on import config</string>
+    <string name="error_file_config_incompatible">Incompatible config file</string>
+    <string name="file_validate_end">Expired configuration file</string>
+
+    <string name="operation_failed">Operation failed!</string>
+    <string name="reset_app_data">Clear app data</string>
+    <string name="reset_app_title">Are you sure you want to clear the settings?</string>
+    <string name="reset_app_txt">Your configuration or the configuration of imported files will be deleted. The app will close after clearing the data</string>
+    <string name="confirm">Ok</string>
+
+    <string name="reset_app_config">Clear config</string>
+    <string name="reset_app_config_title">Are you sure you want to clear the config?</string>
+    <string name="local_ip">Local IP:</string>
+    <string name="local_ip_error">Could not get local IP address</string>
+
+    <string name="please_wait">Please wait...</string>
+    <string name="please_wait_trying">Just a little more... :)</string>
+
+    <string name="ad_thanks_1">Thank you for sponsoring our coffee with cheese bread :)</string>
+    <string name="ad_thanks_2">Thank you for sponsoring our coca-cola :)</string>
+    <string name="ad_thanks_3">Thanks for helping the app :)</string>
+    <string name="ad_thanks_4">Thanks for helping this noble developer :)</string>
+    <string name="ad_thanks_5">:)</string>
+    <string name="clear_logs">Clear logs</string>
+    <string name="cleared_logs">Clean logs</string>
+
+    <string name="wakelock_disabled">Wakelock disabled</string>
+    <string name="stopping">Stopping...</string>
+    <string name="connected">Connected!</string>
+    <string name="wakelock_enabled">Wakelock enabled</string>
+    <string name="server_message">Server Message:</string>
+    <string name="login_error">Authentication error!</string>
+    <string name="autenticating_public_key">Authenticating with public key</string>
+    <string name="validating_acess">Authenticating...</string>
+    <string name="enabled_ssh_compress">SSH compression enabled</string>
+    <string name="failed_build_vpn">Failed to start tunnel vpn service</string>
+    <string name="disconnected_log">Disconnected!</string>
+    <string name="injeting">Injecting...</string>
+    <string name="vpn_estabilished">VPN established!</string>
+    <string name="vpn_destroyed">VPN interrupted!</string>
+
+    <string name="open_app_firts">Open the app at least once before importing!</string>
+    <string name="network_dns">Active DNS:</string>
+    <string name="network_ipv6">IPv6 was detected in the route!</string>
+    <string name="network_ipv6_2">The connection will continue normally</string>
+
+    <string name="filter_apps_loading">Loading installed applications...</string>
+    <string name="filter_apps_configure">Configure apps filter</string>
+    <string name="title_filter_apps">Filter Apps</string>
+    <string name="vpn_disallow_radio" >VPN is used for all apps but exclude</string>
+    <string name="vpn_allow_radio" >VPN is used for only for selected apps</string>
+    <string name="vpn_added_apps" >Apps added to VPN:</string>
+    <string name="vpn_excluded_apps" >VPN Excluded Apps:</string>
+    <string name="app_no_longer_exists">Package is no longer installed, removing it from the allow /disallow list of apps %s</string>
+    <string name="no_allowed_app">No apps allowed added. Adding ourselves (%s) to have at least one app in the allowed apps list to disallow all apps</string>
+
+    <string name="empty_login">Your login is empty!</string>
+    <string name="only_play_store">Unofficial installation blocked!</string>
+    <string name="show_logs_start">Show logs on start</string>
+    <string name="starting_tunnel_service">Starting tunnel service...</string>
+</resources>

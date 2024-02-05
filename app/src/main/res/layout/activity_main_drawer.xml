@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.drawerlayout.widget.DrawerLayout
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:app="http://schemas.android.com/apk/res-auto"
+	xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/drawerLayoutMain"
+	android:layout_height="match_parent"
+	android:layout_width="match_parent"
+	android:fitsSystemWindows="true"
+	tools:openDrawer="start">
+
+	<LinearLayout
+		android:layout_width="match_parent"
+		android:layout_height="match_parent"
+		android:gravity="center_horizontal|center_vertical"
+		android:orientation="vertical"
+		android:background="@color/primary_color_variant_variant">
+
+		<include
+			android:layout_height="wrap_content"
+			android:layout_width="match_parent"
+			layout="@layout/toolbar_main"/>
+
+		<androidx.drawerlayout.widget.DrawerLayout
+			android:id="@+id/drawerLayout"
+			android:layout_height="match_parent"
+			android:layout_width="match_parent">
+
+			<include
+				layout="@layout/activity_main"/>
+
+			<LinearLayout
+				android:id="@+id/activity_mainLogsDrawerLinear"
+				android:layout_width="320dp"
+				android:layout_height="match_parent"
+				android:orientation="vertical"
+				android:layout_gravity="end"
+				android:padding="6dp"
+				android:background="@color/primary_color_variant_variant">
+
+				<androidx.recyclerview.widget.RecyclerView
+					android:id="@+id/recyclerDrawerView"
+					android:gravity="start"
+					android:textColor="@color/white"
+					android:layout_width="fill_parent"
+					android:layout_height="match_parent"
+					android:layout_alignParentLeft="true">
+
+				</androidx.recyclerview.widget.RecyclerView>
+
+			</LinearLayout>
+
+		</androidx.drawerlayout.widget.DrawerLayout>
+
+	</LinearLayout>
+
+	<com.google.android.material.navigation.NavigationView
+		android:background="@color/primary_color_variant_variant"
+		android:layout_width="wrap_content"
+		android:layout_height="match_parent"
+		android:layout_gravity="start"
+		app:headerLayout="@layout/nav_header"
+		android:id="@+id/drawerNavigationView"
+	/>
+
+</androidx.drawerlayout.widget.DrawerLayout>

@@ -1,0 +1,339 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent">
+
+
+    <ScrollView
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent">
+
+    <LinearLayout
+        android:id="@+id/activity_mainLinearLayout"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:focusable="true"
+        android:focusableInTouchMode="true"
+        android:orientation="vertical"
+        tools:ignore="MissingClass">
+
+        <com.google.android.gms.ads.AdView
+            xmlns:ads="http://schemas.android.com/apk/res-auto"
+            android:id="@+id/adView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_alignParentBottom="true"
+            android:layout_gravity="center"
+            ads:adSize="BANNER"
+            ads:adUnitId="ca-app-pub-2955918284006466/5236078879">
+        </com.google.android.gms.ads.AdView>
+
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+        </TextView>
+
+        <LinearLayout
+            android:id="@+id/activity_mainInputServerSSHIPORTLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="3dp"
+            android:background="@color/primary_color_variant"
+            android:orientation="vertical"
+            android:padding="3dp">
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/activity_mainInputServerSSHIPORT"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:ems="10"
+                    android:hint="@string/serverssh"
+                    android:inputType="text"
+                    android:maxLines="1"
+                    android:textColor="@color/white" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/activity_mainInputServerPROXYIPORTLayout"
+            android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+            android:layout_marginTop="3dp"
+            android:background="@color/primary_color_variant"
+            android:orientation="vertical"
+            android:padding="3dp">
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/activity_mainInputServerPROXYIPORT"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:ems="10"
+                    android:hint="@string/serverproxy"
+                    android:inputType="text"
+                    android:maxLines="1"
+                    android:textColor="@color/white" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/activity_mainInputSNILayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="3dp"
+            android:background="@color/primary_color_variant"
+            android:orientation="vertical"
+            android:padding="3dp">
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/activity_mainInputSNI"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:ems="10"
+                    android:hint="@string/sni"
+                    android:inputType="text"
+                    android:maxLines="1"
+                    android:textColor="@color/white" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:id="@+id/activity_mainInputPayloadLinearLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="3dp"
+            android:background="@color/primary_color_variant"
+            android:orientation="vertical"
+            android:padding="3dp">
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/activity_mainInputPayloadEditText"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:ems="10"
+                    android:hint="@string/payload"
+                    android:inputType="textMultiLine|textLongMessage"
+                    android:textColor="@color/white" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/activity_mainInputUserandPassLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="3dp"
+            android:background="@color/primary_color_variant"
+            android:orientation="vertical"
+            android:padding="3dp">
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/activity_mainInputUserandPass"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:ems="10"
+                    android:hint="@string/userandpass"
+                    android:inputType="text"
+                    android:maxLines="1"
+                    android:textColor="@color/white" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/activity_mainMetodoConexaoLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="3dp"
+            android:background="@color/primary_color_variant"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:padding="3dp">
+
+            <TextView
+                android:id="@+id/activity_mainMetodoConexaoText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/method_connection"
+                android:textStyle="bold" />
+
+            <!--<Spinner
+                android:id="@+id/activity_mainTunnelTypeSpinner"
+                android:layout_height="wrap_content"
+                android:layout_width="match_parent"
+                android:spinnerMode="dropdown"
+                android:layout_marginRight="20dp"
+                android:layout_marginLeft="20dp"/>-->
+
+            <RadioGroup
+                android:id="@+id/activity_mainMetodoConexaoRadio"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:breakStrategy="balanced"
+                android:gravity="center"
+                android:orientation="horizontal">
+
+                <androidx.appcompat.widget.AppCompatRadioButton
+                    android:id="@+id/modo_http"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:hint="Proxy HTTP"
+                    android:padding="5dp" />
+
+                <androidx.appcompat.widget.AppCompatRadioButton
+                    android:id="@+id/modo_https"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:hint="Proxy HTTPS" />
+
+            </RadioGroup>
+
+            <androidx.appcompat.widget.SwitchCompat
+                android:id="@+id/activity_mainPayloadAfterTLS"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="right"
+                android:hint="@string/payload_after_tls" />
+
+            <androidx.appcompat.widget.SwitchCompat
+                android:id="@+id/activity_mainDirectMode"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="right"
+                android:hint="@string/is_direct_mode" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/activity_mainInputProxyLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="3dp"
+            android:background="@color/primary_color_variant"
+            android:gravity="center_horizontal"
+            android:orientation="horizontal"
+            android:visibility="visible">
+
+
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:layout_height="wrap_content"
+            android:layout_width="match_parent"
+            android:orientation="horizontal">
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/activity_StartConnection"
+                android:textStyle="bold"
+                android:text="@string/start"
+                android:layout_gravity="center"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="40dp"
+                android:layout_marginRight="40dp"
+                android:textColor="@color/black"
+                android:textSize="15sp"
+                app:backgroundTint="@color/white"
+                app:cornerRadius="8dp"
+                app:rippleColor="#33AAAAAA"
+                app:strokeColor="@color/white"
+                app:strokeWidth="2dp" />
+
+        </LinearLayout>
+
+        <TextView
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:text=""
+            android:textStyle="bold"/>
+
+
+        <TextView
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:text=""
+            android:textStyle="bold"/>
+
+        <LinearLayout
+            android:id="@+id/config_msg_layout"
+            android:layout_height="wrap_content"
+            android:layout_width="match_parent"
+            android:orientation="vertical"
+            android:layout_margin="5dp"
+            android:layout_gravity="center"
+            android:background="@color/black"
+            android:padding="3dp"
+            android:visibility="visible">
+
+            <TextView
+                android:enabled="true"
+                android:layout_gravity="center"
+                android:id="@+id/config_msg_textview"
+                android:layout_height="wrap_content"
+                android:layout_width="wrap_content"
+                android:autoLink="web"/>
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+    </ScrollView>
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="match_parent"
+        android:gravity="right"
+        android:orientation="horizontal"
+        tools:ignore="RtlHardcoded">
+
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:visibility="visible"
+            android:id="@+id/logs"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end|bottom|center"
+            android:layout_marginLeft="16.0dip"
+            android:layout_marginTop="16.0dip"
+            android:layout_marginRight="16.0dip"
+            android:layout_marginBottom="16.0dip"
+            android:clickable="true"
+            android:focusable="true"
+            android:src="@drawable/ic_baseline_article_24"
+            app:backgroundTint="@color/white" />
+
+    </LinearLayout>
+</RelativeLayout>

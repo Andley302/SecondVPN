@@ -1,0 +1,32 @@
+pluginManagement {
+    repositories {
+        gradlePluginPortal()
+        google()
+        mavenCentral()
+        maven { url 'https://maven.aliyun.com/repository/google/'}
+        maven { url 'https://maven.aliyun.com/repository/public/'}
+        maven { url 'https://maven.aliyun.com/repository/gradle-plugin/'}
+        maven {
+            url "https://plugins.gradle.org/m2/"
+        }
+
+    }
+}
+dependencyResolutionManagement {
+    repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
+    repositories {
+        google()
+        mavenCentral()
+        maven { url "https://jitpack.io" }
+        maven { url "https://repo.spring.io/plugins-release/" }
+        maven { url 'https://maven.aliyun.com/repository/google/'}
+        maven { url 'https://maven.aliyun.com/repository/public/'}
+        maven { url 'https://maven.aliyun.com/repository/gradle-plugin/'}
+        maven {
+            url "https://artifactory.appodeal.com/appodeal"
+        }
+
+    }
+}
+rootProject.name = "Second VPN - Lite"
+include ':app'

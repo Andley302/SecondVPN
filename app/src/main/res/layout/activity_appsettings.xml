@@ -1,0 +1,320 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent">
+
+
+    <ScrollView
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent">
+
+
+    <LinearLayout
+        android:id="@+id/activity_settingsLinearLayout"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:focusable="true"
+        android:focusableInTouchMode="true"
+        android:orientation="vertical"
+        tools:ignore="MissingClass">
+
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/settings_toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="@color/black"
+            android:elevation="4dp"
+            android:theme="@style/ThemeOverlay.AppCompat.Dark"
+            app:popupTheme="@style/ThemeOverlay.AppCompat.Dark">
+        </androidx.appcompat.widget.Toolbar>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="3dp"
+            android:background="@color/primary_color_variant"
+            android:orientation="vertical"
+            android:padding="3dp">
+
+
+            <TextView
+                android:layout_marginLeft="4dp"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:gravity="center"
+                android:textStyle="bold"
+                android:ems="10"
+                android:hint="@string/udp_settings"
+                android:maxLines="1"
+                android:textColor="@color/white" />
+
+            <androidx.appcompat.widget.SwitchCompat
+                android:id="@+id/enable_udp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:hint="@string/enable_udp" />
+
+
+            <EditText
+                android:id="@+id/input_udp"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:hint="@string/type_udp"
+                android:inputType="text"
+                android:maxLines="1"
+                android:textColor="@color/white" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="3dp"
+            android:background="@color/primary_color_variant"
+            android:orientation="vertical"
+            android:padding="3dp">
+
+            <TextView
+                android:layout_marginLeft="4dp"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:gravity="center"
+                android:textStyle="bold"
+                android:ems="10"
+                android:hint="@string/dns_settings"
+                android:maxLines="1"
+                android:textColor="@color/white" />
+
+            <androidx.appcompat.widget.SwitchCompat
+                android:id="@+id/enable_dns"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:hint="@string/enable_dns" />
+
+
+            <EditText
+                android:id="@+id/input_dns_1"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:hint="@string/type_dns_1"
+                android:inputType="text"
+                android:maxLines="1"
+                android:textColor="@color/white" />
+
+            <EditText
+                android:id="@+id/input_dns_2"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:hint="@string/type_dns_2"
+                android:inputType="text"
+                android:maxLines="1"
+                android:textColor="@color/white" />
+
+
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="3dp"
+            android:background="@color/primary_color_variant"
+            android:orientation="vertical"
+            android:padding="3dp">
+
+
+            <TextView
+                android:layout_marginLeft="4dp"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:gravity="center"
+                android:textStyle="bold"
+                android:ems="10"
+                android:hint="@string/connection_options"
+                android:maxLines="1"
+                android:textColor="@color/white" />
+
+            <androidx.appcompat.widget.SwitchCompat
+                android:id="@+id/enable_sshcompress"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:hint="@string/enable_ssh_compress" />
+
+            <androidx.appcompat.widget.SwitchCompat
+                android:id="@+id/disable_tcp_delay"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:hint="@string/disable_tcp_delay" />
+
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="3dp"
+            android:background="@color/primary_color_variant"
+            android:orientation="vertical"
+            android:padding="3dp">
+
+            <TextView
+                android:layout_marginLeft="4dp"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:gravity="center"
+                android:textStyle="bold"
+                android:ems="10"
+                android:hint="@string/tls_settings"
+                android:maxLines="1"
+                android:textColor="@color/white" />
+
+            <TextView
+                android:onClick="onClick"
+                android:clickable="true"
+                android:id="@+id/set_tls_version"
+                android:layout_width="fill_parent"
+                android:layout_height="40dp"
+                android:gravity="center"
+                android:ems="10"
+                android:hint="@string/tls_version"
+                android:inputType="text"
+                android:maxLines="1"
+                android:textColor="@color/white" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="3dp"
+            android:background="@color/primary_color_variant"
+            android:orientation="vertical"
+            android:padding="3dp">
+
+
+            <TextView
+                android:layout_marginLeft="4dp"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:gravity="center"
+                android:textStyle="bold"
+                android:ems="10"
+                android:hint="@string/tethering_settings"
+                android:maxLines="1"
+                android:textColor="@color/white" />
+
+            <androidx.appcompat.widget.SwitchCompat
+                android:id="@+id/enable_thetering"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:hint="@string/enable_tethering" />
+
+            <androidx.appcompat.widget.SwitchCompat
+                android:visibility="gone"
+                android:checked="true"
+                android:enabled="false"
+                android:id="@+id/enable_thetering_root"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:hint="@string/enable_tethering_root" />
+
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="3dp"
+            android:background="@color/primary_color_variant"
+            android:orientation="vertical"
+            android:padding="3dp">
+
+
+            <TextView
+                android:layout_marginLeft="4dp"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:gravity="center"
+                android:textStyle="bold"
+                android:ems="10"
+                android:hint="@string/other_settings"
+                android:maxLines="1"
+                android:textColor="@color/white" />
+
+            <androidx.appcompat.widget.SwitchCompat
+                android:id="@+id/enable_wakelock"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:hint="@string/enable_wakelock" />
+
+            <androidx.appcompat.widget.SwitchCompat
+                android:id="@+id/show_logs"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:hint="@string/show_logs_start" />
+
+
+            <androidx.appcompat.widget.SwitchCompat
+                android:checked="true"
+                android:visibility="gone"
+                android:id="@+id/enable_notification"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:hint="@string/enable_notifications" />
+
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="3dp"
+            android:background="@color/primary_color_variant"
+            android:orientation="vertical"
+            android:padding="3dp">
+
+            <TextView
+                android:layout_marginLeft="4dp"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:gravity="center"
+                android:textStyle="bold"
+                android:ems="10"
+                android:hint="@string/title_filter_apps"
+                android:maxLines="1"
+                android:textColor="@color/white" />
+
+            <TextView
+                android:onClick="onClick"
+                android:clickable="true"
+                android:id="@+id/filter_apps_configure"
+                android:layout_width="fill_parent"
+                android:layout_height="40dp"
+                android:gravity="center"
+                android:ems="10"
+                android:hint="@string/filter_apps_configure"
+                android:inputType="text"
+                android:maxLines="1"
+                android:textColor="@color/white" />
+
+        </LinearLayout>
+
+
+    </LinearLayout>
+
+    </ScrollView>
+
+</RelativeLayout>

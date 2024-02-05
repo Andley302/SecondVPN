@@ -1,0 +1,36 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:app="http://schemas.android.com/apk/res-auto"
+	>
+	<item
+		android:id="@+id/import_file"
+		android:title="@string/import_file"/>
+	<item
+		android:id="@+id/export_file"
+		android:title="@string/export_file"/>
+	<item
+		android:id="@+id/settings"
+		android:title="@string/settings"/>
+
+	<item
+		android:id="@+id/clearlogs"
+		android:title="@string/clear_logs"/>
+	<item
+		android:id="@+id/clearconfig"
+		android:title="@string/reset_app_config"/>
+
+	<item
+		android:id="@+id/cleardata"
+		android:title="@string/reset_app_data"/>
+
+	<item
+		android:id="@+id/forcestop"
+		android:title="@string/force_stop"/>
+
+	<item
+		android:id="@+id/minimize"
+		android:title="@string/minimize"/>
+	<item
+        android:id="@+id/exit_app"
+        android:title="@string/exit"/>
+	
+</menu>

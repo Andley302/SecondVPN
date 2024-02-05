@@ -1,0 +1,32 @@
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <!-- Base application theme. -->
+    <style name="Theme.SecondVPNLite" parent="Theme.MaterialComponents.NoActionBar">
+        <!-- Primary brand color. -->
+        <item name="colorPrimary">@color/black</item>
+        <item name="colorPrimaryVariant">@color/black</item>
+        <item name="colorOnPrimary">@color/black</item>
+        <!-- Secondary brand color. -->
+        <item name="colorSecondary">@color/white</item>
+        <item name="colorSecondaryVariant">@color/white</item>
+        <item name="colorOnSecondary">@color/black</item>
+    </style>
+
+    <style name="DATE_DIALOG_THEME" parent="ThemeOverlay.AppCompat.Dialog">
+        <item name="colorAccent">@color/black</item>                   <!--header background-->
+        <item name="android:windowBackground">@color/cinza</item>     <!--calendar background-->
+        <item name="android:colorControlActivated">@color/white</item> <!--selected day-->
+        <item name="android:textColorPrimary">@color/white</item> <!--days of the month-->
+        <item name="android:textColorSecondary">@color/white</item>    <!--days of the week-->
+    </style>
+
+    <style name="AlertDialogTheme" parent="ThemeOverlay.AppCompat.Dialog">
+        <item name="colorAccent">@color/black</item>                   <!--header background-->
+        <item name="android:windowBackground">@color/cinza</item>     <!--calendar background-->
+        <item name="android:colorControlActivated">@color/white</item> <!--selected day-->
+        <item name="android:textColorPrimary">@color/white</item> <!--days of the month-->
+        <item name="android:textColorSecondary">@color/white</item>    <!--days of the week-->
+    </style>
+
+
+
+</resources>

@@ -1,0 +1,163 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    package="app.one.secondvpnlite">
+
+    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE"/>
+    <uses-permission android:name="android.permission.CHANGE_WIFI_STATE"/>
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <uses-permission android:name="android.permission.VIBRATE" />
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS"/>
+    <uses-permission android:name="android.permission.QUERY_ALL_PACKAGES"
+        tools:ignore="QueryAllPackagesPermission" />
+
+
+    <application
+        android:name=".SecondVPN"
+        android:allowBackup="true"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:roundIcon="@mipmap/ic_launcher_round"
+        android:supportsRtl="true"
+        android:networkSecurityConfig="@xml/network_security_config"
+        android:hardwareAccelerated="true"
+        android:theme="@style/Theme.SecondVPNLite">
+        <activity
+            android:name=".MainActivity"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
+        <activity
+            android:label="@string/title_filter_apps"
+            android:exported="true"
+            android:name=".settings.AllowedAppsActivity"/>
+
+        <activity
+            android:label="@string/settings"
+            android:exported="true"
+            android:name=".settings.AppSettings"/>
+        <activity
+            android:label="@string/export_file"
+            android:exported="true"
+            android:name=".configs.ExportConfig"/>
+        <activity
+            android:label="@string/import_file"
+            android:exported="true"
+            android:name=".configs.ImportConfig"
+            android:grantUriPermissions="true"
+            android:parentActivityName=".MainActivity">
+        <intent-filter>
+            <action android:name="android.intent.action.VIEW" />
+            <category android:name="android.intent.category.DEFAULT" />
+            <category android:name="android.intent.category.BROWSABLE" />
+            <data android:scheme="file"/>
+            <data android:scheme="content"/>
+            <data android:mimeType="*/*"/>
+            <data android:host="*"/>
+            <data android:port="*" tools:ignore="AppLinkUrlError"/>
+            <data android:pathPattern=".*.vpnlite"/>
+            <data android:pathPattern=".*.bin"/>
+            <data android:pathPattern=".*.enc"/>
+            <data android:pathPattern=".*..*.vpnlite"/>
+            <data android:pathPattern=".*..*.bin"/>
+            <data android:pathPattern=".*..*.enc"/>
+            <data android:pathPattern=".*..*..*.vpnlite"/>
+            <data android:pathPattern=".*..*..*.bin"/>
+            <data android:pathPattern=".*..*..*.enc"/>
+            <data android:pathPattern=".*..*..*..*.vpnlite"/>
+            <data android:pathPattern=".*..*..*..*.bin"/>
+            <data android:pathPattern=".*..*..*..*.enc"/>
+            <data android:pathPattern=".*..*..*..*..*.vpnlite"/>
+            <data android:pathPattern=".*..*..*..*..*.bin"/>
+            <data android:pathPattern=".*..*..*..*..*.enc"/>
+            <data android:pathPattern=".*..*..*..*..*..*.vpnlite"/>
+            <data android:pathPattern=".*..*..*..*..*..*.bin"/>
+            <data android:pathPattern=".*..*..*..*..*..*.enc"/>
+            <data android:pathPattern=".*..*..*..*..*..*..*.vpnlite"/>
+            <data android:pathPattern=".*..*..*..*..*..*..*.bin"/>
+            <data android:pathPattern=".*..*..*..*..*..*..*.enc"/>
+        </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW"/>
+                <category android:name="android.intent.category.BROWSABLE"/>
+                <category android:name="android.intent.category.DEFAULT"/>
+                <data android:mimeType="application/octet-stream"/>
+                <data android:mimeType="application/octetstream"/>
+                <data android:scheme="content"/>
+                <data android:host="*"/>
+            </intent-filter>
+            <intent-filter>
+            <action android:name="android.intent.action.VIEW"/>
+            <category android:name="android.intent.category.BROWSABLE"/>
+            <category android:name="android.intent.category.DEFAULT"/>
+            <data android:mimeType="*/*"/>
+            <data android:scheme="file"/>
+            <data android:host="*"/>
+            <data android:pathPattern=".*\\.bin"/>
+            <data android:pathPattern=".*\\.enc"/>
+            <data android:pathPattern=".*\\.vpnlite"/>
+            <data android:pathPattern=".*\\..*\\.bin"/>
+            <data android:pathPattern=".*\\..*\\.vpnlite"/>
+            <data android:pathPattern=".*\\..*\\.enc"/>
+            <data android:pathPattern=".*\\..*\\..*\\.vpnlite"/>
+            <data android:pathPattern=".*\\..*\\..*\\.enc"/>
+            <data android:pathPattern=".*\\..*\\..*\\..*\\.vpnlite"/>
+            <data android:pathPattern=".*\\..*\\..*\\..*\\.enc"/>
+            <data android:pathPattern=".*\\..*\\..*\\..*\\..*\\.vpnlite"/>
+            <data android:pathPattern=".*\\..*\\..*\\..*\\..*\\..*\\.vpnlite"/>
+            <data android:pathPattern=".*\\..*\\..*\\..*\\..*\\..*\\..*\\.vpnlite"/>
+            <data android:pathPattern=".*\\..*\\..*\\..*\\..*\\..*\\..*\\..*\\.vpnlite"/>
+            <data android:pathPattern=".*\\..*\\..*\\..*\\..*\\..*\\..*\\..*\\..*\\.vpnlite"/>
+        </intent-filter>
+
+        </activity>
+        <service
+            android:process=":TunnelManager"
+            android:stopWithTask="false"
+            android:label="Second VPN - Lite"
+            android:exported="true"
+            android:enabled="true"
+            android:permission="android.permission.BIND_VPN_SERVICE"
+            android:name=".service.TunnelManager">
+            <intent-filter>
+                <action android:name="android.net.VpnService"/>
+            </intent-filter>
+        </service>
+
+
+        <service
+            android:stopWithTask="false"
+            android:label="Second VPN Lite - Notification"
+            android:name=".notification.NotificationService"
+            android:exported="false"
+            android:enabled="true">
+        </service>
+
+
+        <service
+            android:process=":TetheringServer"
+            android:label="Second VPN - Tethering"
+            android:name=".tethering.TetheringServer"
+            android:stopWithTask="false"
+            android:exported="true"
+            tools:ignore="Instantiatable">
+        </service>
+
+        <!-- Sample AdMob app ID: ca-app-pub-3940256099942544~3347511713 -->
+        <meta-data
+            android:name="com.google.android.gms.ads.APPLICATION_ID"
+            android:value="ca-app-pub-2955918284006466~1566095472"/>
+
+        <uses-library
+            android:name="org.apache.http.legacy"
+            android:required="false" />
+    </application>
+
+</manifest>

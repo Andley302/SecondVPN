@@ -343,10 +343,7 @@ public class MainActivity extends AppCompatActivity implements DrawerLayout.Draw
         AdView adView = new AdView(sContext);
 
         adView.setAdSize(AdSize.BANNER);
-        String b1 = new String(new byte[]{99,97,45,97,112,112,45,112,117,98,45,50,57,53,53,57,49,56,50,56});
-        String b2 = new String(new byte[]{52,48,48,54,52,54,54,47,53,50,51,54,48,55,56,56,55});
-        String b3 = "9";
-        String ab = "";
+        String ab = "ca-app";
         if (BuildConfig.DEBUG){
             ab = "ca-app-pub-3940256099942544/6300978111";
             //TEST DEVICE
@@ -355,10 +352,6 @@ public class MainActivity extends AppCompatActivity implements DrawerLayout.Draw
                     new RequestConfiguration.Builder().setTestDeviceIds(testDeviceIds).build();
             MobileAds.setRequestConfiguration(configuration);*/
 
-        }else{
-
-          ab = b1 + b2 + b3;
-          //ca-app-pub-2955918284006466/5236078879
         }
         adView.setAdUnitId(ab);
         // TODO: Add adView to your view hierarchy.
@@ -368,16 +361,10 @@ public class MainActivity extends AppCompatActivity implements DrawerLayout.Draw
         mAdView.loadAd(adRequest);
 
 
-        String ai1 = new String(new byte[]{99,97,45,97,112});
-        String ai2 = new String(new byte[]{112,45,112,117,98,45,50,57,53,53,57,49,56,50,56,52,48,48,54,52,54,54,47,50,51,53,54,52,51,50,57,54});
-        String ai3 = "3";
-
-        String ai = "";
+        String ai = "ca-app";
         if (BuildConfig.DEBUG){
            ai = "ca-app-pub-3940256099942544/1033173712";
 
-        }else{
-            ai = ai1 + ai2 + ai3;
         }
 
         //CARREGA INTERSTITIAL AD

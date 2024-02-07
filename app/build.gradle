@@ -10,8 +10,7 @@ android {
         applicationId "app.one.secondvpnlite"
         minSdk 21
         targetSdk 33
-        versionCode 31 //25 agora é a 0.21_beta, usar 26 pra versão 1.0.3
-        //versionName "0.21_beta" //IR ALTERANDO CONFORME VERSIONCODE MESMO COMENTADO,PRA NAO PERDER DE VISTA
+        versionCode 31
         versionName "1.0.8"
         multiDexEnabled false
 

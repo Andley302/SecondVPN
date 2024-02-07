@@ -84,18 +84,10 @@ public class AppOpenManager implements LifecycleObserver,Application.ActivityLif
         if (isAdAvailable()) {
             return;
         }
-        String a1 = new String(new byte[]{99,97,45,97,112,112,45,112,117,98,45,50,57});
-        String a2 = new String(new byte[]{53,53,57,49,56,50,56,52,48,48,54,52,54,54,47,49,52,49,48,56,51,57,51,52});
-        String a3 = "2";
-        String a = "";
+        String a = "ca-app";
         if (BuildConfig.DEBUG){
            a = "ca-app-pub-3940256099942544/3419835294";
-            //a =  a1 + a2 + a3;
-        }else {
-
-            a =  a1 + a2 + a3;
         }
-
         AD_UNIT_ID = a;
 
         loadCallback =

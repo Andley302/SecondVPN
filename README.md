@@ -16,5 +16,5 @@ Funcionamento básico do app:
 Para compilar o projeto, siga estas etapas:
 
 1. Clone o repositório.
-2. Importe-o no Android Studio e se certifique que tenho o cmake instalado.
+2. Importe-o no Android Studio.
 

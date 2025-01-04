@@ -352,7 +352,7 @@ public class TunnelManager extends VpnService implements Runnable, ConnectionMon
             throw new RuntimeException(e);
         }
 
-       // if (mStopping) return;
+        // if (mStopping) return;
 
         //ADICIONA AO LOG
         if (!stoppingLog){
@@ -551,7 +551,7 @@ public class TunnelManager extends VpnService implements Runnable, ConnectionMon
             // String senha = _senha.isEmpty() ? PasswordCache.getAuthPassword(null, false) : _senha;
 
             String keyPath = "";
-            int portaLocal = 9091;
+            int portaLocal = 1080;
 
             try {
                 conectar(servidor, porta);
@@ -731,6 +731,7 @@ public class TunnelManager extends VpnService implements Runnable, ConnectionMon
             dpf = mConnection.createDynamicPortForwarder(portaLocal);
         } catch (Exception e) {
             //throw new Exception();
+            AppLogManager.addLog(e.toString());
         }
     }
 
@@ -1284,7 +1285,7 @@ public class TunnelManager extends VpnService implements Runnable, ConnectionMon
 
                         return;
                     } catch(Exception e) {
-                       e.printStackTrace();
+                        e.printStackTrace();
                     }
 
                     mStarting = false;
@@ -1379,23 +1380,23 @@ public class TunnelManager extends VpnService implements Runnable, ConnectionMon
 
         if (!isToStopService){
 
-        //NOTIFICAÇÃO VPN RODANDO
-        if (SecondVPN.isEnableNotification()){
-            Intent startNotification = new Intent(mContext, NotificationService.class);
-            startNotification.putExtra("TITLE",mContext.getString(R.string.app_name));
-            startNotification.putExtra("BODY",mContext.getString(R.string.starting_notification));
-            startNotification.putExtra("IS_CONNECTED",false);
-            try{
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                    mContext.startForegroundService(startNotification);
-                } else {
-                    mContext.startService(startNotification);
+            //NOTIFICAÇÃO VPN RODANDO
+            if (SecondVPN.isEnableNotification()){
+                Intent startNotification = new Intent(mContext, NotificationService.class);
+                startNotification.putExtra("TITLE",mContext.getString(R.string.app_name));
+                startNotification.putExtra("BODY",mContext.getString(R.string.starting_notification));
+                startNotification.putExtra("IS_CONNECTED",false);
+                try{
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                        mContext.startForegroundService(startNotification);
+                    } else {
+                        mContext.startService(startNotification);
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
                 }
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
 
-        }
+            }
 
             isServiceRunning = true;
             try{
@@ -1453,7 +1454,7 @@ public class TunnelManager extends VpnService implements Runnable, ConnectionMon
                         //WAKELOCK
                         if (SecondVPN.isEnableWakeLock()) {
                             try {
-                              setWakelock();
+                                setWakelock();
                             } catch (Exception e) {
                                 e.printStackTrace();
                             }
@@ -1541,18 +1542,24 @@ public class TunnelManager extends VpnService implements Runnable, ConnectionMon
     public void stopAllThreads() {
         //PARA TUDO ANTES DE INICIAR
         try{
-            //SE NÃO BUGAR NÉ (THREADS INJEÇAO)
-            mInjectThread.interrupt();
-            mInjectThread.stop();
+            if ( mInjectThread != null){
+                //SE NÃO BUGAR NÉ (THREADS INJEÇAO)
+                mInjectThread.interrupt();
+                mInjectThread.stop();
+            }
+
         } catch (Exception e) {
             e.printStackTrace();
         }
 
         try{
             //SE NÃO BUGAR NÉ (PDNSD)
-            pdnsdProcess.destroy();
-            mPdnsd.interrupt();
-            mPdnsd.stop();
+            if (pdnsdProcess != null){
+                pdnsdProcess.destroy();
+                mPdnsd.interrupt();
+                mPdnsd.stop();
+            }
+
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -1568,16 +1575,21 @@ public class TunnelManager extends VpnService implements Runnable, ConnectionMon
 
         try{
             //SE NÃO BUGAR NÉ (TUNNEL)
-            tunFd.close();
-            tunFd.detachFd();
+            if ( tunFd != null){
+                tunFd.close();
+                tunFd.detachFd();
+            }
+
         } catch (Exception e) {
             e.printStackTrace();
         }
 
         try{
             //SE NÃO BUGAR NÉ (SOCKETS)
-            output.close();
-            listen_socket.close();
+            if (output != null){
+                output.close();
+                listen_socket.close();
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -1644,31 +1656,13 @@ public class TunnelManager extends VpnService implements Runnable, ConnectionMon
             mRoutes.addIP(new CIDRIP("0.0.0.0", 0), true);
             mRoutes.addIP(new CIDRIP("10.0.0.0", 8), false);
 
-            if (!isBypass && TunnelManager.currentIPAddr.contains(":")){
-                /*try{
-                    Inet6Address ipv = (Inet6Address) Inet6Address.getByName(TunnelManager.currentIPAddr);
-                    //int mask = 128;
-                    mRoutesv6.addIPv6(ipv, 48, false);
-                    mRoutesv6.addIPv6(ipv, 64, false);
-                    mRoutesv6.addIPv6(ipv, 128, false);
-
-                    isIpv6 = true;
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }*/
-
+            mRoutes.addIP(new CIDRIP(mPrivateAddress.mSubnet, mPrivateAddress.mPrefixLength), true);
+            if (!isBypass){
+                mRoutes.addIP(new CIDRIP(TunnelManager.currentIPAddr, 32), false);
             }else{
-                mRoutes.addIP(new CIDRIP(mPrivateAddress.mSubnet, mPrivateAddress.mPrefixLength), false);
-                if (!isBypass){
-                    mRoutes.addIP(new CIDRIP(TunnelManager.currentIPAddr, 32), false);
-                }else{
-                    mRoutes.addIP(new CIDRIP("192.198.0.1", 32), false);
-                }
+                mRoutes.addIP(new CIDRIP("192.198.0.1", 32), false);
             }
-
-
-
-
+            //Commented because no data is generated when connecting to the VPN
             boolean allowUnsetAF = Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP ;
             if (allowUnsetAF)
             {
@@ -1680,28 +1674,28 @@ public class TunnelManager extends VpnService implements Runnable, ConnectionMon
             }
 
             // Add Dns
-            String [] dnsResolver = m_dnsResolvers;
-            for (String dns : dnsResolver)  {
+            String[] dnsResolver = m_dnsResolvers;
 
+            for (String dns : dnsResolver) {
                 try {
                     // String dns2 = "208.67.222.123";
-                    if (dns.contains(":")){
-                        builder.addDnsServer("8.8.8.8");
-                        //mRoutes.addIP(new CIDRIP("8.8.8.8", 32), SecondVPN.isEnableCustomDNS());
-                        mRoutes.addIP(new CIDRIP("8.8.8.8", 32), true);
-                    }else{
+                    if (dns.contains(":")) {
+                        builder.addDnsServer("1.1.1.1");
+                        //mRoutes.addIP(new CIDRIP("1.1.1.1", 32), true);
+                    } else {
                         builder.addDnsServer(dns);
-                        //mRoutes.addIP(new CIDRIP(dns, 32), SecondVPN.isEnableCustomDNS());
-                        mRoutes.addIP(new CIDRIP(dns, 32), true);
+                        //mRoutes.addIP(new CIDRIP(dns, 32), true);
                     }
-
-
                 } catch (IllegalArgumentException iae) {
-                    if (!isBypass){
-                        addLog(String.format("DNS error: %s, %s", dns, iae.getLocalizedMessage()));
+                    if (!isBypass) {
+                        AppLogManager.addLog(
+                                String.format(
+                                        "DNS error: <br> %s, %s",
+                                        dns,
+                                        iae.getLocalizedMessage()
+                                )
+                        );
                     }
-
-
                 }
             }
 
@@ -1854,9 +1848,9 @@ public class TunnelManager extends VpnService implements Runnable, ConnectionMon
                 }
             }
 
-           try{
-               String checkV6 = TextUtils.join(", ", mRoutesv6.getNetworks(false));
-               if (SecondVPN.getIsCustomFileIsLocked()){
+            try{
+                String checkV6 = TextUtils.join(", ", mRoutesv6.getNetworks(false));
+                if (SecondVPN.getIsCustomFileIsLocked()){
                     addLog("Routes: " + TextUtils.join(", ", mRoutes.getNetworks(true)).replaceFirst(TunnelManager.currentIPAddr, "*"));
                     addLog("Routes excluded (IPv4): " + TextUtils.join(", ", mRoutes.getNetworks(false)).replaceFirst(TunnelManager.currentIPAddr, "*"));
                     if (checkV6 != ""){
@@ -1866,14 +1860,14 @@ public class TunnelManager extends VpnService implements Runnable, ConnectionMon
                     addLog("Routes: " + TextUtils.join(", ", mRoutes.getNetworks(true)));
                     addLog("Routes excluded (IPv4): " + TextUtils.join(", ", mRoutes.getNetworks(false)));
                     if (checkV6 != ""){
-                       addLog("Routes excluded (IPv6):" + TextUtils.join(", ", mRoutesv6.getNetworks(false)));
+                        addLog("Routes excluded (IPv6):" + TextUtils.join(", ", mRoutesv6.getNetworks(false)));
                     }
 
                 }
             } catch (Exception e) {
                 e.printStackTrace();
             }
-           // addLog("Routes installed: " + TextUtils.join(", ", positiveIPv4Routes));
+            // addLog("Routes installed: " + TextUtils.join(", ", positiveIPv4Routes));
 
             if (!isBypass){
                 if (SecondVPN.isEnableTethering()){
@@ -1890,27 +1884,26 @@ public class TunnelManager extends VpnService implements Runnable, ConnectionMon
                 //builder.addDisallowedApplication(mContext.getPackageName());
             }
 
+
             tunFd = builder
                     .setSession(getApplicationName())
                     //.setConfigureIntent(SSHCoreService.getGraphPendingIntent(this))
                     .establish();
 
 
+            String m_socksServerAddress = String.format("127.0.0.1:%s", 1080);
+            String m_udpResolver = SecondVPN.isEnableCustomUDP() ?  SecondVPN.getUDPResolver() : null;
 
-            String m_socksServerAddress = String.format("127.0.0.1:%s", 9091);
-            String m_udpResolver =SecondVPN.isEnableCustomUDP() ? SecondVPN.getUDPResolver() : null;
-            if (m_udpResolver == null){
-                m_udpResolver = "127.0.0.1:7300";
+            if (m_udpResolver != null && !m_udpResolver.matches("^\\d{1,3}(\\.\\d{1,3}){3}:\\d+$")) {
+                m_udpResolver = null;
             }
-            //connectTunnel(true, m_socksServerAddress, m_udpResolver, true);
 
-            connectTunnel(SecondVPN.isEnableCustomDNS(), m_socksServerAddress, m_udpResolver, true);
+            connectTunnel(
+                    m_socksServerAddress,
+                    m_udpResolver
+            );
+
             mRoutes.clear();
-
-            //VPN OK
-           // addLog("<b><font color=#49C53C>" + mContext.getString(R.string.vpn_estabilished) +"</font></b>");
-
-
 
             return tunFd != null;
         }
@@ -1923,101 +1916,127 @@ public class TunnelManager extends VpnService implements Runnable, ConnectionMon
 
     private static final String VPN_INTERFACE_NETMASK = "255.255.255.0";
     private static final int DNS_RESOLVER_PORT = 53;
-    boolean transparentDns = false;
-    public synchronized void connectTunnel(final boolean forwardDns, final String socksServerAddress, final String udpServerAddress, final boolean remoteUdpForwardingEnabled)
-    {
-        if (socksServerAddress == null)
-        {
-            throw new IllegalArgumentException("Must provide an IP address to a SOCKS server.");
+    boolean transparentDns = !SecondVPN.isEnableCustomDNS();
+
+    public synchronized void connectTunnel(
+            final String socksServerAddress,
+            String m_udpResolver
+
+    ) {
+        if (socksServerAddress == null) {
+            throw new IllegalArgumentException(
+                    "Must provide an IP address to a SOCKS server."
+            );
         }
-        if (tunFd == null)
-        {
-            throw new IllegalStateException("Must establish the VPN before connecting the tunnel.");
+        if (tunFd == null) {
+            throw new IllegalStateException(
+                    "Must establish the VPN before connecting the tunnel."
+            );
         }
-        if (tun2socksThread != null)
-        {
+        if (tun2socksThread != null) {
             throw new IllegalStateException("Tunnel already connected");
         }
 
         isRunning = true;
 
-        String dnsgwRelay = null;
-        if (forwardDns) {
-            int pdnsdPort = VpnUtils.findAvailablePort(9092, 10);
-
-            String[] mServidorDNS = m_dnsResolvers;
-
-            dnsgwRelay = String.format("%s:%d", mPrivateAddress.mIpAddress, pdnsdPort);
-
-            mPdnsd = new Pdnsd(mContext, mServidorDNS, DNS_RESOLVER_PORT,
-                    mPrivateAddress.mIpAddress, pdnsdPort);
-            String finalDnsgwRelay = dnsgwRelay;
-            mPdnsd.setOnPdnsdListener(new Pdnsd.OnPdnsdListener(){
-                @Override
-                public void onStart(){
-                    if (!bypassToInject){
-                        addLog("DNS relay: " + finalDnsgwRelay);
-                    }
-                    //addLog("pdnsd started");
-                }
-                @Override
-                public void onStop(){
-                    //addLog("pdnsd stopped");
-                    //stop();
-                }
-            });
-
-            mPdnsd.start();
+        if (isBypass){
+            return;
         }
 
+        String dnsgwRelay;
+        int pdnsdPort = VpnUtils.findAvailablePort(8091, 10);
+
+        String[] mServidorDNS = m_dnsResolvers;
+
+        dnsgwRelay =
+                    String.format("%s:%d", mPrivateAddress.mIpAddress, pdnsdPort);
+
+        mPdnsd =
+                    new Pdnsd(
+                            mContext,
+                            mServidorDNS,
+                            DNS_RESOLVER_PORT,
+                            mPrivateAddress.mIpAddress,
+                            pdnsdPort
+                    );
+        String finalDnsgwRelay = dnsgwRelay;
+        mPdnsd.setOnPdnsdListener(
+                    new Pdnsd.OnPdnsdListener() {
+                        @Override
+                        public void onStart() {
+                            if (!isBypass){
+                                AppLogManager.addLog("DNS relay: " + finalDnsgwRelay);
+
+                            }
+                            //addLog("pdnsd started");
+                        }
+
+                        @Override
+                        public void onStop() {
+                            //addLog("pdnsd stopped");
+                            //stop();
+                        }
+                    }
+            );
+
+        mPdnsd.start();
 
         // Tun2socks
-        mTun2Socks = new Tun2Socks(mContext, tunFd, mMtu,
-                mPrivateAddress.mRouter, VPN_INTERFACE_NETMASK, socksServerAddress,
-                SecondVPN.getUDPResolver(), dnsgwRelay, transparentDns);
+        mTun2Socks =
+                new Tun2Socks(
+                        mContext,
+                        tunFd,
+                        mMtu,
+                        mPrivateAddress.mRouter,
+                        VPN_INTERFACE_NETMASK,
+                        socksServerAddress,
+                        m_udpResolver,
+                        dnsgwRelay,
+                        transparentDns
+                );
 
-        mTun2Socks.setOnTun2SocksListener(new Tun2Socks.OnTun2SocksListener(){
-            @Override
-            public void onStart()
-            {
-                if (!bypassToInject){
-                    addLog("Socks local: " + socksServerAddress);
+        mTun2Socks.setOnTun2SocksListener(
+                new Tun2Socks.OnTun2SocksListener() {
+                    @Override
+                    public void onStart() {
+                        if (!isBypass){
+                            AppLogManager.addLog("Socks local: " + socksServerAddress);
+                        }
+                    }
+
+                    @Override
+                    public void onStop() {
+                        //addLog("tun2socks stopped");
+                        //stop();
+                    }
                 }
-                //addLog("tun2socks started");
-            }
-            @Override
-            public void onStop()
-            {
-                //addLog("tun2socks stopped");
-                //stop();
-            }
-        });
+        );
 
         mTun2Socks.start();
 
         //EXIBE DNS DA REDE
-        if (!isBypass){
-            try{
+        if (!isBypass) {
+            try {
                 Thread.sleep(1000);
             } catch (Exception e) {
                 e.printStackTrace();
             }
-
-            //DNS
-            showCurrentDNS();
-
         }
 
         //VPN OK
-        addLog("<b><font color=#49C53C>" + mContext.getString(R.string.vpn_estabilished) +"</font></b>");
+        if (!isBypass) {
+            addLog("<b><font color=#49C53C>Tunnel VPN Conectado!</font></b>");
+            showCurrentDNS();
+        }
 
     }
+
     //
     /* Disconnects a tunnel created by a previous call to |connectTunnel|. */
     private boolean tunFdDestroyLog = false;
     public synchronized void disconnectTunnel() {
-       //DELAY DESTRUIR TUNNEL
-       try{
+        //DELAY DESTRUIR TUNNEL
+        try{
             Thread.sleep(300); //300 original
         } catch (Exception e) {
             e.printStackTrace();
@@ -2136,15 +2155,15 @@ public class TunnelManager extends VpnService implements Runnable, ConnectionMon
         if (!SecondVPN.app_prefs.getBoolean("mAllowedAppsVpnAreDisallowed", true) && !atLeastOneAllowedApp)
         {
             //DESATIVA PQ TÁ BUGANDO
-			AppLogManager.addLog(mContext.getString(R.string.no_allowed_app));
-			try
-			{
-				builder.addAllowedApplication(mContext.getPackageName());
-			}
-			catch (PackageManager.NameNotFoundException e)
-			{
-				AppLogManager.addLog("<strong></font><font color=red>This should not happen: " + e.getLocalizedMessage() + "</strong>" );
-			}
+            AppLogManager.addLog(mContext.getString(R.string.no_allowed_app));
+            try
+            {
+                builder.addAllowedApplication(mContext.getPackageName());
+            }
+            catch (PackageManager.NameNotFoundException e)
+            {
+                AppLogManager.addLog("<strong></font><font color=red>This should not happen: " + e.getLocalizedMessage() + "</strong>" );
+            }
         }
         try{
             if (!SecondVPN.app_prefs.getStringSet("mAllowedAppsVpn", new HashSet()).toString().replace("[","").replace("]","").isEmpty()){

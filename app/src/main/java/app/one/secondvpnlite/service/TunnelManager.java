@@ -83,7 +83,7 @@ import app.one.secondvpnlite.tunnel.vpn.Tun2Socks;
 import app.one.secondvpnlite.tunnel.vpn.VpnUtils;
 
 public class TunnelManager extends VpnService implements Runnable, ConnectionMonitor, InteractiveCallback,
-        ServerHostKeyVerifier, DebugLogger  {
+        ServerHostKeyVerifier, DebugLogger {
 
     private final String TAG = "TunnelManager";
     private static final Charset UTF_8 = Charset.forName("UTF-8");
@@ -120,26 +120,20 @@ public class TunnelManager extends VpnService implements Runnable, ConnectionMon
         wakeLock = MainActivity.wakeLock;
     }
 
-    private void setWakelock()
-    {
-        try
-        {
+    private void setWakelock() {
+        try {
             //CERTO DEPOIS DE 10 MIN
             //this.wakeLock.acquire(10*60*1000L /*10 minutes*/);
             wakeLock.acquire();
-        }
-        catch (Exception e)
-        {
+        } catch (Exception e) {
             Log.d("WAKELOCK", e.getMessage());
         }
     }
 
 
-    private void unsetWakelock()
-    {
-        if (this.wakeLock != null && this.wakeLock.isHeld())
-        {
-            try{
+    private void unsetWakelock() {
+        if (this.wakeLock != null && this.wakeLock.isHeld()) {
+            try {
                 this.wakeLock.release();
                 AppLogManager.addLog(mContext.getString(R.string.wakelock_disabled));
             } catch (Exception e) {
@@ -157,58 +151,49 @@ public class TunnelManager extends VpnService implements Runnable, ConnectionMon
 
     private Connection mConnection;
 
-    public void stopMultiStatusInjectThread()
-    {
+    public void stopMultiStatusInjectThread() {
         //Log.i(TAG,"Socket Stopped");
-        try
-        {
-            if(sc1 != null){
+        try {
+            if (sc1 != null) {
                 sc1.interrupt();
                 sc1 = null;
             }
-            if(sc2 != null){
+            if (sc2 != null) {
                 sc2.interrupt();
                 sc2 = null;
             }
 
-            if (listen_socket != null)
-            {
+            if (listen_socket != null) {
                 listen_socket.close();
                 listen_socket = null;
             }
-            if (input != null)
-            {
+            if (input != null) {
                 input.close();
                 input = null;
             }
-            if (output != null)
-            {
+            if (output != null) {
                 output.close();
                 output = null;
             }
-            if (mInjectThread != null)
-            {
+            if (mInjectThread != null) {
                 mInjectThread.interrupt();
             }
 
 
-        }
-        catch (Exception e)
-        {
+        } catch (Exception e) {
 
         }
     }
+
     Runnable newinjectTh = new Runnable() {
 
         @Override
-        public void run()
-        {
+        public void run() {
 
             // TODO: Implement this method
-            try
-            {
+            try {
 
-                if (listen_socket != null){
+                if (listen_socket != null) {
                     try {
                         listen_socket.close();
                     } catch (IOException ex) {
@@ -220,35 +205,29 @@ public class TunnelManager extends VpnService implements Runnable, ConnectionMon
                 listen_socket.setReuseAddress(true);
 
 
-                while (true)
-                {
+                while (true) {
                     input = listen_socket.accept();
                     input.setSoTimeout(0);
 
 
-                    if (SecondVPN.getConnectionMode().equals("MODO_HTTP") && !SecondVPN.isHTTPDirect() ){
+                    if (SecondVPN.getConnectionMode().equals("MODO_HTTP") && !SecondVPN.isHTTPDirect()) {
                         output = new HTTPSupport3(input).socket2();
                     }
 
-                    if (SecondVPN.getConnectionMode().equals("MODO_HTTPS") && SecondVPN.isPayloadAfterTLS() ){
+                    if (SecondVPN.getConnectionMode().equals("MODO_HTTPS") && SecondVPN.isPayloadAfterTLS()) {
                         output = new SSLProxy(input).inject();
                     }
 
 
-                    if (input != null)
-                    {
+                    if (input != null) {
                         input.setKeepAlive(true);
                     }
-                    if (output != null)
-                    {
+                    if (output != null) {
                         output.setKeepAlive(true);
                     }
-                    if (output == null)
-                    {
+                    if (output == null) {
                         output.close();
-                    }
-                    else if (output.isConnected())
-                    {
+                    } else if (output.isConnected()) {
                         //AppLogManager.addLog(mContext.getString(R.string.state_proxy_running));
                         sc1 = new HTTPThread(input, output, true);
                         sc2 = new HTTPThread(output, input, false);
@@ -258,10 +237,8 @@ public class TunnelManager extends VpnService implements Runnable, ConnectionMon
                         sc2.start();
                     }
                 }
-            }
-            catch (Exception e)
-            {
-                if (listen_socket != null){
+            } catch (Exception e) {
+                if (listen_socket != null) {
                     try {
                         listen_socket.close();
                     } catch (IOException ex) {
@@ -284,8 +261,8 @@ public class TunnelManager extends VpnService implements Runnable, ConnectionMon
     }
 
     private void startMultiStatusInject() {
-        try{
-            if (mInjectThread != null){
+        try {
+            if (mInjectThread != null) {
                 mInjectThread.interrupt();
             }
             mInjectThread = new Thread(newinjectTh, "mInjectThread");
@@ -303,10 +280,11 @@ public class TunnelManager extends VpnService implements Runnable, ConnectionMon
             mConnection.close();
         }
     }
+
     public synchronized void closeSSH2() {
         //INICIA VPN TUNNEL COM BYPASS
-        if (!fakeTunnelIsStarted){
-            try{
+        if (!fakeTunnelIsStarted) {
+            try {
                 startFakeTunnelVpnService();
             } catch (Exception e) {
                 e.printStackTrace();
@@ -328,10 +306,11 @@ public class TunnelManager extends VpnService implements Runnable, ConnectionMon
     }
 
     private void stopNetworkCallback() {
-        if (networkCallback != null){
-            try{
+        if (networkCallback != null) {
+            try {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                    ConnectivityManager connectivityManager = (ConnectivityManager) mContext.getSystemService(Context.CONNECTIVITY_SERVICE);;
+                    ConnectivityManager connectivityManager = (ConnectivityManager) mContext.getSystemService(Context.CONNECTIVITY_SERVICE);
+                    ;
                     connectivityManager.unregisterNetworkCallback(networkCallback);
                 }
             } catch (Exception e) {
@@ -346,33 +325,32 @@ public class TunnelManager extends VpnService implements Runnable, ConnectionMon
     public void stopAll() {
         mStopping = true;
 
-        try{
+        try {
             stopNetworkCallback();
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
 
-       // if (mStopping) return;
+        // if (mStopping) return;
 
         //ADICIONA AO LOG
-        if (!stoppingLog){
+        if (!stoppingLog) {
             AppLogManager.addLog(mContext.getString(R.string.stopping));
             stoppingLog = true;
         }
 
 
-
         //SETA STATUS VPN
         SecondVPN.setCurrentVpnStatus("PARANDO");
 
-        try{
+        try {
             MainActivity.setButtonStatus("PARANDO");
         } catch (Exception e) {
             e.printStackTrace();
         }
 
-        if (SecondVPN.isEnableWakeLock()){
-            try{
+        if (SecondVPN.isEnableWakeLock()) {
+            try {
                 unsetWakelock();
             } catch (Exception e) {
                 e.printStackTrace();
@@ -392,7 +370,7 @@ public class TunnelManager extends VpnService implements Runnable, ConnectionMon
             if (mConnection != null) {
                 mConnection.close();
             }
-            try{
+            try {
                 stopMultiStatusInjectThread();
             } catch (Exception e) {
                 e.printStackTrace();
@@ -401,8 +379,8 @@ public class TunnelManager extends VpnService implements Runnable, ConnectionMon
             try {
                 //Thread.sleep(1000);
                 Thread.sleep(2000);
-            } catch(InterruptedException e){}
-
+            } catch (InterruptedException e) {
+            }
 
 
             mRunning = false;
@@ -416,28 +394,28 @@ public class TunnelManager extends VpnService implements Runnable, ConnectionMon
         //PARA TUDO
         //stopSelf();
         //INTERROMPE NOTIFICAÇÃO
-        try{
+        try {
             stopNotification();
         } catch (Exception e) {
             e.printStackTrace();
         }
 
-        try{
+        try {
             closeSSH2();
             closeSSH();
             stopMultiStatusInjectThread();
             stopForwarderSocks();
             stopForwarder();
             //PARA TETHERING SE HABILITADO
-            if (SecondVPN.isEnableTethering()){
+            if (SecondVPN.isEnableTethering()) {
                 StopTethering();
             }
-            if (SecondVPN.isEnableTetheringRoot()){
+            if (SecondVPN.isEnableTetheringRoot()) {
                 stopTetheringRoot();
             }
             //LOG
-            if (!stoppedLog){
-                AppLogManager.addLog("<strong></font><font color=#FF0000>"+ mContext.getString(R.string.disconnected_log) +"</strong>");
+            if (!stoppedLog) {
+                AppLogManager.addLog("<strong></font><font color=#FF0000>" + mContext.getString(R.string.disconnected_log) + "</strong>");
                 stoppedLog = true;
             }
 
@@ -447,7 +425,7 @@ public class TunnelManager extends VpnService implements Runnable, ConnectionMon
 
             //SETA STATUS VPN
             SecondVPN.setCurrentVpnStatus("DESCONECTADO");
-            try{
+            try {
                 MainActivity.setButtonStatus("DESCONECTADO");
             } catch (Exception e) {
                 e.printStackTrace();
@@ -464,11 +442,11 @@ public class TunnelManager extends VpnService implements Runnable, ConnectionMon
         stopSelf();
     }
 
-    private void stopNotification(){
+    private void stopNotification() {
         //NOTIFICAÇÃO
-        if (SecondVPN.isEnableNotification()){
+        if (SecondVPN.isEnableNotification()) {
             Intent stopNotification = new Intent(mContext, NotificationService.class);
-            try{
+            try {
                 mContext.stopService(stopNotification);
             } catch (Exception e) {
                 NotificationService.stopNotification();
@@ -491,15 +469,16 @@ public class TunnelManager extends VpnService implements Runnable, ConnectionMon
             return hostIP;
         }
     }
+
     public void startSSH() throws Exception {
 
         //NOTIFICAÇÃO VPN RODANDO
-        if (SecondVPN.isEnableNotification()){
+        if (SecondVPN.isEnableNotification()) {
             Intent startNotification = new Intent(mContext, NotificationService.class);
-            startNotification.putExtra("TITLE",mContext.getString(R.string.app_name));
-            startNotification.putExtra("BODY",mContext.getString(R.string.starting_notification));
-            startNotification.putExtra("IS_CONNECTED",false);
-            try{
+            startNotification.putExtra("TITLE", mContext.getString(R.string.app_name));
+            startNotification.putExtra("BODY", mContext.getString(R.string.starting_notification));
+            startNotification.putExtra("IS_CONNECTED", false);
+            try {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                     mContext.startForegroundService(startNotification);
                 } else {
@@ -511,9 +490,9 @@ public class TunnelManager extends VpnService implements Runnable, ConnectionMon
 
         }
 
-        if (!isToStopService){
+        if (!isToStopService) {
             //Monitora rede
-            try{
+            try {
                 startNetworkCallback();
             } catch (Exception e) {
                 AppLogManager.addLog(e.toString());
@@ -530,7 +509,7 @@ public class TunnelManager extends VpnService implements Runnable, ConnectionMon
             String _senha = userAndPasSplit[1];
 
 
-            try{
+            try {
                 servidor = ipSplit[0];
                 servidor_domain = ipSplit[0];
 
@@ -539,10 +518,10 @@ public class TunnelManager extends VpnService implements Runnable, ConnectionMon
                 e.printStackTrace();
             }
 
-            if (servidor.isEmpty()){
+            if (servidor.isEmpty()) {
                 servidor = ipSplit[0];
             }
-            if (servidor == null){
+            if (servidor == null) {
                 servidor = ipSplit[0];
             }
 
@@ -551,11 +530,10 @@ public class TunnelManager extends VpnService implements Runnable, ConnectionMon
             // String senha = _senha.isEmpty() ? PasswordCache.getAuthPassword(null, false) : _senha;
 
             String keyPath = "";
-            int portaLocal = 9091;
+            int portaLocal = 1080;
 
             try {
                 conectar(servidor, porta);
-
 
 
                 for (int i = 0; i < AUTH_TRIES; i++) {
@@ -581,7 +559,7 @@ public class TunnelManager extends VpnService implements Runnable, ConnectionMon
                 }
 
                 //SETA BOTAO CONECTADO
-                try{
+                try {
                     MainActivity.setButtonStatus("CONECTADO");
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -594,19 +572,19 @@ public class TunnelManager extends VpnService implements Runnable, ConnectionMon
                 }
 
                 ////AppLogManager.updateStateString(//AppLogManager.SSH_CONECTADO, "Conexão SSH estabelecida");
-                AppLogManager.addLog("<strong></font><font color=#49C53C>"+ mContext.getString(R.string.connected) +"</strong>");
+                AppLogManager.addLog("<strong></font><font color=#49C53C>" + mContext.getString(R.string.connected) + "</strong>");
                 SecondVPN.setCurrentVpnStatus("CONECTADO");
                 if (SecondVPN.isEnableWakeLock()) {
                     AppLogManager.addLog(mContext.getString(R.string.wakelock_enabled));
                 }
                 //NOTIFICAÇÃO CONECTADO
-                if (SecondVPN.isEnableNotification()){
+                if (SecondVPN.isEnableNotification()) {
                     reconnectNotificationIsStarted = false;
                     Intent startNotification = new Intent(mContext, NotificationService.class);
-                    startNotification.putExtra("TITLE",mContext.getString(R.string.app_name));
-                    startNotification.putExtra("BODY",mContext.getString(R.string.connected_notification));
-                    startNotification.putExtra("IS_CONNECTED",true);
-                    try{
+                    startNotification.putExtra("TITLE", mContext.getString(R.string.app_name));
+                    startNotification.putExtra("BODY", mContext.getString(R.string.connected_notification));
+                    startNotification.putExtra("IS_CONNECTED", true);
+                    try {
                         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                             mContext.startForegroundService(startNotification);
                         } else {
@@ -617,7 +595,7 @@ public class TunnelManager extends VpnService implements Runnable, ConnectionMon
                     }
 
                 }
-                if (SecondVPN.isEnableTetheringRoot()){
+                if (SecondVPN.isEnableTetheringRoot()) {
                     AppLogManager.addLog(mContext.getString(R.string.tethering_root_enable));
                     AppLogManager.addLog(mContext.getString(R.string.tethering_root_not_avaliable));
                 }
@@ -627,19 +605,19 @@ public class TunnelManager extends VpnService implements Runnable, ConnectionMon
                 Thread.sleep(3500);
 
 
-            } catch(Exception e) {
+            } catch (Exception e) {
                 mConnected = false;
                 throw e;
             }
-        }else{
-            try{
+        } else {
+            try {
                 stopAll();
             } catch (Exception e) {
                 e.printStackTrace();
             }
 
             //INTERROMPE NOTIFICAÇÃO
-            try{
+            try {
                 stopNotification();
             } catch (Exception e) {
                 e.printStackTrace();
@@ -661,7 +639,7 @@ public class TunnelManager extends VpnService implements Runnable, ConnectionMon
                 public void onAvailable(Network network) {
                     // Lógica para quando a rede está disponível
                     //Toast.makeText(mContext, "Rede disponível", Toast.LENGTH_SHORT).show();
-                    if (mConnected){
+                    if (mConnected) {
                         Throwable reasonClosedCause = new Exception("A network error occurred (network lost).");
                         connectionLost(reasonClosedCause);
                     }
@@ -684,9 +662,9 @@ public class TunnelManager extends VpnService implements Runnable, ConnectionMon
 
     private void showCurrentDNS() {
         //mostrar dns
-        try{
+        try {
             String dnslist = "";
-            try{
+            try {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                     dnslist = connectivityManager.getLinkProperties(connectivityManager.getActiveNetwork()).getDnsServers().toString();
 
@@ -695,7 +673,7 @@ public class TunnelManager extends VpnService implements Runnable, ConnectionMon
                 dnslist = "?";
                 e.printStackTrace();
             }
-            final String final_dnslist = dnslist.replace("[","").replace("]","").replace("/","").replace(" ","");
+            final String final_dnslist = dnslist.replace("[", "").replace("]", "").replace("/", "").replace(" ", "");
             AppLogManager.addLog(mContext.getString(R.string.network_dns) + " " + final_dnslist);
         } catch (Exception e) {
             e.printStackTrace();
@@ -708,7 +686,7 @@ public class TunnelManager extends VpnService implements Runnable, ConnectionMon
         }
 
         startForwarderSocks(portaLocal);
-        try{
+        try {
             //VER PQ NAO GERA DADOS AQUI
             bypassToInject = false;
             startTunnelVpnService();
@@ -731,6 +709,7 @@ public class TunnelManager extends VpnService implements Runnable, ConnectionMon
             dpf = mConnection.createDynamicPortForwarder(portaLocal);
         } catch (Exception e) {
             //throw new Exception();
+            AppLogManager.addLog(e.toString());
         }
     }
 
@@ -738,7 +717,7 @@ public class TunnelManager extends VpnService implements Runnable, ConnectionMon
         if (dpf != null) {
             try {
                 dpf.close();
-            } catch(IOException e){
+            } catch (IOException e) {
                 e.printStackTrace();
             }
             dpf = null;
@@ -751,17 +730,15 @@ public class TunnelManager extends VpnService implements Runnable, ConnectionMon
     }
 
 
-
     protected synchronized void stopTunnelVpnService() {
         disconnectTunnel();
 
     }
 
 
-
-    private void StartTethering(){
+    private void StartTethering() {
         //HOTSTOP
-        try{
+        try {
             WifiManager wifiManager = (WifiManager) mContext.getApplicationContext().getSystemService(Context.WIFI_SERVICE);
             int apState = (Integer) wifiManager.getClass().getMethod("getWifiApState").invoke(wifiManager);
             if (apState == 13) {
@@ -769,20 +746,20 @@ public class TunnelManager extends VpnService implements Runnable, ConnectionMon
                 mTetheringServer = new TetheringServer();
                 mTetheringThread = new Thread(mTetheringServer);
                 mTetheringThread.start();
-            }else{
-                AppLogManager.addLog( "<strong></font><font color=red>" + mContext.getString(R.string.hostpot_isOFF) +" " + "</strong>");
+            } else {
+                AppLogManager.addLog("<strong></font><font color=red>" + mContext.getString(R.string.hostpot_isOFF) + " " + "</strong>");
 
             }
 
         } catch (Exception e) {
-            AppLogManager.addLog( "<strong></font><font color=red>" + mContext.getString(R.string.hostpot_error) +" " + "</strong>");
+            AppLogManager.addLog("<strong></font><font color=red>" + mContext.getString(R.string.hostpot_error) + " " + "</strong>");
 
             e.printStackTrace();
         }
     }
 
-    private void StopTethering(){
-        try{
+    private void StopTethering() {
+        try {
             TetheringServer.isToStopTethering = true;
             mTetheringServer = new TetheringServer();
             mTetheringThread = new Thread(mTetheringServer);
@@ -791,16 +768,19 @@ public class TunnelManager extends VpnService implements Runnable, ConnectionMon
             e.printStackTrace();
         }
     }
-    private void stopTetheringRoot(){
+
+    private void stopTetheringRoot() {
         AppLogManager.addLog(mContext.getString(R.string.tethering_root_stoppped));
     }
+
     /**
      * Vpn Tunnel
      */
 
 
-    public static String[] m_dnsResolvers=  new String[]{"1.1.1.1","1.0.0.1"};
-    private void setDNS(){
+    public static String[] m_dnsResolvers = new String[]{"1.1.1.1", "1.0.0.1"};
+
+    private void setDNS() {
         if (SecondVPN.isEnableCustomDNS()) {
             m_dnsResolvers = new String[]{SecondVPN.customDNS1(), SecondVPN.customDNS2()};
         } else {
@@ -811,6 +791,7 @@ public class TunnelManager extends VpnService implements Runnable, ConnectionMon
     }
 
     public static String currentIPAddr;
+
     protected void startTunnelVpnService() throws IOException {
         isBypass = false;
         setDNS();
@@ -829,15 +810,15 @@ public class TunnelManager extends VpnService implements Runnable, ConnectionMon
         fakeTunnelIsStarted = true;
     }
 
-    private void startTunnelPrefs(){
+    private void startTunnelPrefs() {
         mRoutes = new NetworkSpace();
         mRoutesv6 = new NetworkSpace();
         IpAddress ipAddr = new IpAddress();
         privateIpAddress = ipAddr.getPrivateAddress();
-        prefixLength =   ipAddr.getPrefixLength();
+        prefixLength = ipAddr.getPrefixLength();
         mRouter = ipAddr.getPrivateAddressRouter();
 
-        try{
+        try {
             mPrivateAddress = VpnUtils.selectPrivateAddress();
         } catch (Exception e) {
             e.printStackTrace();
@@ -845,32 +826,30 @@ public class TunnelManager extends VpnService implements Runnable, ConnectionMon
     }
 
 
-
-
     protected void conectar(String servidor, int porta) throws Exception {
         try {
             coS = new HTTPProxyData("127.0.0.1", 9090);
             mConnection = new Connection(servidor, porta);
 
-            if (SecondVPN.getConnectionMode().equals("MODO_HTTP") && !SecondVPN.isHTTPDirect() ){
-                if (this.coS != null){
+            if (SecondVPN.getConnectionMode().equals("MODO_HTTP") && !SecondVPN.isHTTPDirect()) {
+                if (this.coS != null) {
                     mConnection.setProxyData(coS);
                 }
             }
 
-            if (SecondVPN.getConnectionMode().equals("MODO_HTTPS") && SecondVPN.isPayloadAfterTLS() ){
-                if (this.coS != null){
+            if (SecondVPN.getConnectionMode().equals("MODO_HTTPS") && SecondVPN.isPayloadAfterTLS()) {
+                if (this.coS != null) {
                     mConnection.setProxyData(coS);
                 }
             }
 
 
             // delay sleep
-            if (SecondVPN.isEnableNoTCPDelay()){
+            if (SecondVPN.isEnableNoTCPDelay()) {
                 mConnection.setTCPNoDelay(true);
             }
 
-            if (SecondVPN.isEnableSSHCompress()){
+            if (SecondVPN.isEnableSSHCompress()) {
                 mConnection.setCompression(true);
                 AppLogManager.addLog(mContext.getString(R.string.enabled_ssh_compress));
             }
@@ -890,11 +869,11 @@ public class TunnelManager extends VpnService implements Runnable, ConnectionMon
 
             AppLogManager.addLog(R.string.state_connecting);
 
-            mConnection.connect(this, 10*1000, 20*1000);
+            mConnection.connect(this, 10 * 1000, 20 * 1000);
 
             mConnected = true;
 
-        } catch(Exception e) {
+        } catch (Exception e) {
 
             StringWriter sw = new StringWriter();
             e.printStackTrace(new PrintWriter(sw));
@@ -902,24 +881,24 @@ public class TunnelManager extends VpnService implements Runnable, ConnectionMon
             String cause = e.getCause().toString();
             if (useProxy && cause.contains("Key exchange was not finished")) {
                 AppLogManager.addLog("<strong></font><font color=#FF0000>Proxy: Key exchange was not finished</strong>");
-            }else if (!mStopping) {
+            } else if (!mStopping) {
                 //PROTEGER AQUI DO DOMINIO DO SERVIDOR QUANDO ARQUIVO CUSTOMIZADO
-                if (SecondVPN.getIsCustomFileIsLocked()){
+                if (SecondVPN.getIsCustomFileIsLocked()) {
                     String cause_rep = cause;
 
 
-                    AppLogManager.addLog("<strong></font><font color=#FF0000>SSH Error: </strong><strong>"+ cause_rep.replaceAll(servidor,"*").replaceAll(servidor_domain,"*")  + "</strong>");
-                }else{
-                    AppLogManager.addLog("<strong></font><font color=#FF0000>SSH Error: </strong><strong>"+ cause + "</strong>");
+                    AppLogManager.addLog("<strong></font><font color=#FF0000>SSH Error: </strong><strong>" + cause_rep.replaceAll(servidor, "*").replaceAll(servidor_domain, "*") + "</strong>");
+                } else {
+                    AppLogManager.addLog("<strong></font><font color=#FF0000>SSH Error: </strong><strong>" + cause + "</strong>");
                 }
 
-                if (!mReconnecting){
+                if (!mReconnecting) {
                     //DELAY RECONNECT
                     try {
                         AppLogManager.addLog("<strong><font color=\"#ff8c00\">" + mContext.getString(R.string.state_reconnecting) + "...</strong>");
                         //Thread.sleep(1200); //1200 ms
                         Thread.sleep(2000); //1200 ms
-                    } catch(InterruptedException e1) {
+                    } catch (InterruptedException e1) {
                     }
                     //RECONECTA
                     reconnectSSH();
@@ -933,15 +912,16 @@ public class TunnelManager extends VpnService implements Runnable, ConnectionMon
     }
 
     private boolean useProxy = false;
+
     protected void addProxy(Connection conn) throws Exception {
         String customPayload = SecondVPN.getPayloadKey();
         useProxy = true;
         String ModoConexao = SecondVPN.getConnectionMode();
-        if  (ModoConexao.equals("MODO_HTTP")) {
+        if (ModoConexao.equals("MODO_HTTP")) {
             String[] ipSplit = SecondVPN.getServidorSSHDomain().split(":");
             String ip = ipSplit[0];
             int port = Integer.parseInt(ipSplit[1]);
-            if (SecondVPN.isHTTPDirect()){
+            if (SecondVPN.isHTTPDirect()) {
                 useProxy = false;
                 String customPayloadDirect = SecondVPN.getPayloadKey();
                 if (customPayloadDirect != null) {
@@ -956,21 +936,21 @@ public class TunnelManager extends VpnService implements Runnable, ConnectionMon
                 } else {
                     useProxy = false;
                 }
-            }else{
+            } else {
                 useProxy = true;
                 String servidor = ip;
-                int porta =port;
+                int porta = port;
             }
 
-        }else if (ModoConexao.equals("MODO_HTTPS")) {
+        } else if (ModoConexao.equals("MODO_HTTPS")) {
             String[] ipSplit = SecondVPN.getServidorSSHDomain().split(":");
             String ip = ipSplit[0];
             int port = Integer.parseInt(ipSplit[1]);
 
-            Log.d(TAG,"Is HTTPS Proxy");
-            if (SecondVPN.isPayloadAfterTLS()){
+            Log.d(TAG, "Is HTTPS Proxy");
+            if (SecondVPN.isPayloadAfterTLS()) {
                 useProxy = false;
-            }else{
+            } else {
                 useProxy = false;
                 String customSNI = SecondVPN.getSNI();
                 //VERSÃO TLS
@@ -978,9 +958,9 @@ public class TunnelManager extends VpnService implements Runnable, ConnectionMon
                 String sshServer = ip;
                 int sshPort = port;
                 try {
-                    ProxyData sslTypeData = new SSLTunnelProxy(sshServer, sshPort, customSNI,TLSVersion,mContext);
+                    ProxyData sslTypeData = new SSLTunnelProxy(sshServer, sshPort, customSNI, TLSVersion, mContext);
                     conn.setProxyData(sslTypeData);
-                }catch(Exception e) {
+                } catch (Exception e) {
                     AppLogManager.addLog(e.getMessage());
                 }
             }
@@ -1044,7 +1024,7 @@ public class TunnelManager extends VpnService implements Runnable, ConnectionMon
 
 
         if (!mConnection.isAuthenticationComplete()) {
-            AppLogManager.addLog("<strong></font><font color=#FF0000>"+ mContext.getString(R.string.login_error)+"</strong>");
+            AppLogManager.addLog("<strong></font><font color=#FF0000>" + mContext.getString(R.string.login_error) + "</strong>");
             //stopAll();
 
             throw new IOException("Incorrect username or password");
@@ -1142,8 +1122,9 @@ public class TunnelManager extends VpnService implements Runnable, ConnectionMon
 
     private boolean no_network_showed = false;
     private boolean reconnectNotificationIsStarted = false;
+
     public void reconnectSSH() {
-        if (!isToStopService){
+        if (!isToStopService) {
             bypassToInject = true;
             if (mStarting || mStopping || mReconnecting) {
                 return;
@@ -1151,14 +1132,14 @@ public class TunnelManager extends VpnService implements Runnable, ConnectionMon
             mReconnecting = true;
 
             //RECONNECT NOTIFICATION
-            if (!reconnectNotificationIsStarted){
-                if (SecondVPN.isEnableNotification()){
+            if (!reconnectNotificationIsStarted) {
+                if (SecondVPN.isEnableNotification()) {
                     reconnectNotificationIsStarted = true;
                     Intent startNotification = new Intent(mContext, NotificationService.class);
-                    startNotification.putExtra("TITLE",mContext.getString(R.string.app_name));
-                    startNotification.putExtra("BODY",mContext.getString(R.string.state_nonetwork));
-                    startNotification.putExtra("IS_CONNECTED",false);
-                    try{
+                    startNotification.putExtra("TITLE", mContext.getString(R.string.app_name));
+                    startNotification.putExtra("BODY", mContext.getString(R.string.state_nonetwork));
+                    startNotification.putExtra("IS_CONNECTED", false);
+                    try {
                         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                             mContext.startForegroundService(startNotification);
                         } else {
@@ -1172,23 +1153,21 @@ public class TunnelManager extends VpnService implements Runnable, ConnectionMon
             }
 
 
-            try{
+            try {
                 stopMultiStatusInjectThread();
-                if (mInjectThread != null)
-                {
+                if (mInjectThread != null) {
                     mInjectThread.interrupt();
                 }
 
-                if (SecondVPN.getConnectionMode().equals("MODO_HTTP") && !SecondVPN.isHTTPDirect() ){
+                if (SecondVPN.getConnectionMode().equals("MODO_HTTP") && !SecondVPN.isHTTPDirect()) {
                     mInjectThread = new Thread(newinjectTh, "mInjectThread");
                     mInjectThread.start();
                 }
 
-                if (SecondVPN.getConnectionMode().equals("MODO_HTTPS") && SecondVPN.isPayloadAfterTLS() ){
+                if (SecondVPN.getConnectionMode().equals("MODO_HTTPS") && SecondVPN.isPayloadAfterTLS()) {
                     mInjectThread = new Thread(newinjectTh, "mInjectThread");
                     mInjectThread.start();
                 }
-
 
 
             } catch (Exception e) {
@@ -1200,7 +1179,7 @@ public class TunnelManager extends VpnService implements Runnable, ConnectionMon
             try {
                 //Thread.sleep(800); //50 ms
                 Thread.sleep(2000); //50 ms
-            } catch(InterruptedException e) {
+            } catch (InterruptedException e) {
                 mReconnecting = false;
                 return;
             }
@@ -1217,19 +1196,19 @@ public class TunnelManager extends VpnService implements Runnable, ConnectionMon
                     // //AppLogManager.updateStateString(//AppLogManager.SSH_AGUARDANDO_REDE, "Aguardando rede..");
 
 
-                    if (!no_network_showed){
+                    if (!no_network_showed) {
                         no_network_showed = true;
                         AppLogManager.addLog(R.string.state_nonetwork);
 
                         //RECONNECT NOTIFICATION
-                        if (!reconnectNotificationIsStarted){
-                            if (SecondVPN.isEnableNotification()){
+                        if (!reconnectNotificationIsStarted) {
+                            if (SecondVPN.isEnableNotification()) {
                                 reconnectNotificationIsStarted = true;
                                 Intent startNotification = new Intent(mContext, NotificationService.class);
-                                startNotification.putExtra("TITLE",mContext.getString(R.string.app_name));
-                                startNotification.putExtra("BODY",mContext.getString(R.string.state_nonetwork));
-                                startNotification.putExtra("IS_CONNECTED",false);
-                                try{
+                                startNotification.putExtra("TITLE", mContext.getString(R.string.app_name));
+                                startNotification.putExtra("BODY", mContext.getString(R.string.state_nonetwork));
+                                startNotification.putExtra("IS_CONNECTED", false);
+                                try {
                                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                                         mContext.startForegroundService(startNotification);
                                     } else {
@@ -1244,7 +1223,6 @@ public class TunnelManager extends VpnService implements Runnable, ConnectionMon
                     }
 
 
-
                 } else {
                     no_network_showed = false;
                     // isWaitingNetworkShowed = false;
@@ -1254,17 +1232,17 @@ public class TunnelManager extends VpnService implements Runnable, ConnectionMon
                     //AppLogManager.addLog("<strong>" + mContext.getString(R.string.state_reconnecting) + " SSH</strong>");
 
                     try {
-                        if (!isToStopService){
-                            if (isRunning){
-                                try{
+                        if (!isToStopService) {
+                            if (isRunning) {
+                                try {
                                     startSSH();
                                     mStarting = false;
                                     mReconnecting = false;
                                 } catch (Exception e) {
                                     e.printStackTrace();
                                 }
-                            }else{
-                                try{
+                            } else {
+                                try {
                                     stopAll();
                                 } catch (Exception e) {
                                     e.printStackTrace();
@@ -1272,9 +1250,9 @@ public class TunnelManager extends VpnService implements Runnable, ConnectionMon
 
                             }
 
-                        }else {
+                        } else {
                             //PARA TUDO
-                            try{
+                            try {
                                 stopAll();
                             } catch (Exception e) {
                                 e.printStackTrace();
@@ -1283,8 +1261,8 @@ public class TunnelManager extends VpnService implements Runnable, ConnectionMon
                         //mConnected = true;
 
                         return;
-                    } catch(Exception e) {
-                       e.printStackTrace();
+                    } catch (Exception e) {
+                        e.printStackTrace();
                     }
 
                     mStarting = false;
@@ -1292,9 +1270,9 @@ public class TunnelManager extends VpnService implements Runnable, ConnectionMon
 
 
                 try {
-                    Thread.sleep(sleepTime*1000);
+                    Thread.sleep(sleepTime * 1000);
                     i--;
-                } catch(InterruptedException e2){
+                } catch (InterruptedException e2) {
                     mReconnecting = false;
                     return;
                 }
@@ -1302,9 +1280,9 @@ public class TunnelManager extends VpnService implements Runnable, ConnectionMon
 
             mReconnecting = false;
             stopAll();
-        }else{
+        } else {
             //PARA TUDO
-            try{
+            try {
                 stopAll();
             } catch (Exception e) {
                 e.printStackTrace();
@@ -1314,12 +1292,10 @@ public class TunnelManager extends VpnService implements Runnable, ConnectionMon
     }
 
 
-
-
     @Override
     public void onReceiveInfo(int infoId, String infoMsg) {
         if (infoId == SERVER_BANNER) {
-            AppLogManager.addLog("<strong>" + "<b>" + mContext.getString(R.string.server_message)+ "</b>"+ "</strong> " + infoMsg);
+            AppLogManager.addLog("<strong>" + "<b>" + mContext.getString(R.string.server_message) + "</b>" + "</strong> " + infoMsg);
         }
 
         bypassToInject = false;
@@ -1371,35 +1347,35 @@ public class TunnelManager extends VpnService implements Runnable, ConnectionMon
         //PARA TODAS THREADS DOA PP
         stopAllThreads();
 
-        try{
+        try {
             Thread.sleep(50);
         } catch (Exception e) {
             e.printStackTrace();
         }
 
-        if (!isToStopService){
+        if (!isToStopService) {
 
-        //NOTIFICAÇÃO VPN RODANDO
-        if (SecondVPN.isEnableNotification()){
-            Intent startNotification = new Intent(mContext, NotificationService.class);
-            startNotification.putExtra("TITLE",mContext.getString(R.string.app_name));
-            startNotification.putExtra("BODY",mContext.getString(R.string.starting_notification));
-            startNotification.putExtra("IS_CONNECTED",false);
-            try{
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                    mContext.startForegroundService(startNotification);
-                } else {
-                    mContext.startService(startNotification);
+            //NOTIFICAÇÃO VPN RODANDO
+            if (SecondVPN.isEnableNotification()) {
+                Intent startNotification = new Intent(mContext, NotificationService.class);
+                startNotification.putExtra("TITLE", mContext.getString(R.string.app_name));
+                startNotification.putExtra("BODY", mContext.getString(R.string.starting_notification));
+                startNotification.putExtra("IS_CONNECTED", false);
+                try {
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                        mContext.startForegroundService(startNotification);
+                    } else {
+                        mContext.startService(startNotification);
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
                 }
-            } catch (Exception e) {
-                e.printStackTrace();
+
             }
 
-        }
-
             isServiceRunning = true;
-            try{
-                connectivityManager = (ConnectivityManager)  mContext.getSystemService(Context.CONNECTIVITY_SERVICE);
+            try {
+                connectivityManager = (ConnectivityManager) mContext.getSystemService(Context.CONNECTIVITY_SERVICE);
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -1425,21 +1401,20 @@ public class TunnelManager extends VpnService implements Runnable, ConnectionMon
                         try {
                             //Thread.sleep(500);
                             Thread.sleep(2000);
-                        } catch(InterruptedException e2) {
+                        } catch (InterruptedException e2) {
                             stopAll();
                             break;
                         }
-                    }
-                    else {
+                    } else {
                         //BOTÃO INICIAR
-                        try{
+                        try {
                             MainActivity.setButtonStatus("INICIANDO");
                         } catch (Exception e) {
                             e.printStackTrace();
                         }
 
                         //IP LOCAL:
-                        try{
+                        try {
                             AppLogManager.addLog(mContext.getString(R.string.local_ip) + " " + TunnelUtils.getLocalIpAddress());
                         } catch (Exception e) {
                             AppLogManager.addLog(mContext.getString(R.string.local_ip_error));
@@ -1453,7 +1428,7 @@ public class TunnelManager extends VpnService implements Runnable, ConnectionMon
                         //WAKELOCK
                         if (SecondVPN.isEnableWakeLock()) {
                             try {
-                              setWakelock();
+                                setWakelock();
                             } catch (Exception e) {
                                 e.printStackTrace();
                             }
@@ -1464,7 +1439,7 @@ public class TunnelManager extends VpnService implements Runnable, ConnectionMon
                         try {
                             Thread.sleep(100); //500 original
                             //Thread.sleep(1500); //500 original
-                        } catch(InterruptedException e2) {
+                        } catch (InterruptedException e2) {
                             stopAll();
                             break;
                         }
@@ -1476,13 +1451,13 @@ public class TunnelManager extends VpnService implements Runnable, ConnectionMon
                         if (SecondVPN.getConnectionMode().equals("MODO_HTTPS") && SecondVPN.isPayloadAfterTLS()) {
                             startMultiStatusInject();
                         }
-                        if (!isToStopService){
+                        if (!isToStopService) {
                             startSSH();
                             mStarting = false;
                             mReconnecting = false;
-                        }else {
+                        } else {
                             //PARA TUDO
-                            try{
+                            try {
                                 stopAll();
                             } catch (Exception e) {
                                 e.printStackTrace();
@@ -1491,13 +1466,13 @@ public class TunnelManager extends VpnService implements Runnable, ConnectionMon
 
                         break;
                     }
-                } catch(Exception e) {
+                } catch (Exception e) {
                     closeSSH2();
 
                     try {
                         //Thread.sleep(500); //500 original
                         Thread.sleep(2000); //500 original
-                    } catch(InterruptedException e2) {
+                    } catch (InterruptedException e2) {
                         stopAll();
                         break;
                     }
@@ -1511,7 +1486,7 @@ public class TunnelManager extends VpnService implements Runnable, ConnectionMon
             if (!mStopping) {
                 try {
                     mTunnelThreadStopSignal.await();
-                } catch(InterruptedException e) {
+                } catch (InterruptedException e) {
                     Thread.currentThread().interrupt();
                 }
             }
@@ -1540,24 +1515,30 @@ public class TunnelManager extends VpnService implements Runnable, ConnectionMon
 
     public void stopAllThreads() {
         //PARA TUDO ANTES DE INICIAR
-        try{
-            //SE NÃO BUGAR NÉ (THREADS INJEÇAO)
-            mInjectThread.interrupt();
-            mInjectThread.stop();
+        try {
+            if (mInjectThread != null) {
+                //SE NÃO BUGAR NÉ (THREADS INJEÇAO)
+                mInjectThread.interrupt();
+                mInjectThread.stop();
+            }
+
         } catch (Exception e) {
             e.printStackTrace();
         }
 
-        try{
+        try {
             //SE NÃO BUGAR NÉ (PDNSD)
-            pdnsdProcess.destroy();
-            mPdnsd.interrupt();
-            mPdnsd.stop();
+            if (pdnsdProcess != null) {
+                pdnsdProcess.destroy();
+                mPdnsd.interrupt();
+                mPdnsd.stop();
+            }
+
         } catch (Exception e) {
             e.printStackTrace();
         }
 
-        try{
+        try {
             tun2socksThread.interrupt();
             mTun2Socks.interrupt();
             tun2socksThread.stop();
@@ -1566,18 +1547,23 @@ public class TunnelManager extends VpnService implements Runnable, ConnectionMon
             e.printStackTrace();
         }
 
-        try{
+        try {
             //SE NÃO BUGAR NÉ (TUNNEL)
-            tunFd.close();
-            tunFd.detachFd();
+            if (tunFd != null) {
+                tunFd.close();
+                tunFd.detachFd();
+            }
+
         } catch (Exception e) {
             e.printStackTrace();
         }
 
-        try{
+        try {
             //SE NÃO BUGAR NÉ (SOCKETS)
-            output.close();
-            listen_socket.close();
+            if (output != null) {
+                output.close();
+                listen_socket.close();
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -1589,7 +1575,7 @@ public class TunnelManager extends VpnService implements Runnable, ConnectionMon
         mTun2Socks = null;
         mInjectThread = null;
 
-        try{
+        try {
             Thread.sleep(500);
             //Thread.sleep(100);
         } catch (Exception e) {
@@ -1616,18 +1602,15 @@ public class TunnelManager extends VpnService implements Runnable, ConnectionMon
     boolean isIpv6 = false;
 
     private Thread tun2socksThread = null;
+
     static {
         System.loadLibrary("tun2socks");
     }
 
 
-
-
-    public synchronized boolean establishVpn()
-    {
+    public synchronized boolean establishVpn() {
         //addLog("Starting Injector VPN Service");
-        try
-        {
+        try {
             Locale.setDefault(Locale.ENGLISH);
 
             VpnService.Builder builder = new VpnService.Builder();
@@ -1635,8 +1618,7 @@ public class TunnelManager extends VpnService implements Runnable, ConnectionMon
             String release = Build.VERSION.RELEASE;
             if ((Build.VERSION.SDK_INT == Build.VERSION_CODES.KITKAT && !release.startsWith("4.4.3")
                     && !release.startsWith("4.4.4") && !release.startsWith("4.4.5") && !release.startsWith("4.4.6"))
-                    && mMtu < 1280)
-            {
+                    && mMtu < 1280) {
                 mMtu = 1280;
             }
 
@@ -1644,64 +1626,49 @@ public class TunnelManager extends VpnService implements Runnable, ConnectionMon
             mRoutes.addIP(new CIDRIP("0.0.0.0", 0), true);
             mRoutes.addIP(new CIDRIP("10.0.0.0", 8), false);
 
-            if (!isBypass && TunnelManager.currentIPAddr.contains(":")){
-                /*try{
-                    Inet6Address ipv = (Inet6Address) Inet6Address.getByName(TunnelManager.currentIPAddr);
-                    //int mask = 128;
-                    mRoutesv6.addIPv6(ipv, 48, false);
-                    mRoutesv6.addIPv6(ipv, 64, false);
-                    mRoutesv6.addIPv6(ipv, 128, false);
-
-                    isIpv6 = true;
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }*/
-
-            }else{
-                mRoutes.addIP(new CIDRIP(mPrivateAddress.mSubnet, mPrivateAddress.mPrefixLength), false);
-                if (!isBypass){
-                    mRoutes.addIP(new CIDRIP(TunnelManager.currentIPAddr, 32), false);
-                }else{
-                    mRoutes.addIP(new CIDRIP("192.198.0.1", 32), false);
-                }
+            mRoutes.addIP(new CIDRIP(mPrivateAddress.mSubnet, mPrivateAddress.mPrefixLength), true);
+            if (!isBypass) {
+                mRoutes.addIP(new CIDRIP(TunnelManager.currentIPAddr, 32), false);
+            } else {
+                mRoutes.addIP(new CIDRIP("192.198.0.1", 32), false);
             }
+            //Commented because no data is generated when connecting to the VPN
+
+            boolean allowUnsetAF = Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP;
 
 
 
-
-            boolean allowUnsetAF = Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP ;
-            if (allowUnsetAF)
-            {
-                allowAllAFFamilies(builder);
-                if (!isBypass){
+            if (allowUnsetAF) {
+               //allowAllAFFamilies(builder);
+                if (!isBypass) {
                     setAllowedVpnPackages(builder);
                 }
 
             }
 
             // Add Dns
-            String [] dnsResolver = m_dnsResolvers;
-            for (String dns : dnsResolver)  {
+            String[] dnsResolver = m_dnsResolvers;
 
+            for (String dns : dnsResolver) {
                 try {
                     // String dns2 = "208.67.222.123";
-                    if (dns.contains(":")){
-                        builder.addDnsServer("8.8.8.8");
-                        //mRoutes.addIP(new CIDRIP("8.8.8.8", 32), SecondVPN.isEnableCustomDNS());
-                        mRoutes.addIP(new CIDRIP("8.8.8.8", 32), true);
-                    }else{
+                    if (dns.contains(":")) {
+                        builder.addDnsServer("1.1.1.1");
+                        //mRoutes.addIP(new CIDRIP("1.1.1.1", 32), true);
+                    } else {
                         builder.addDnsServer(dns);
-                        //mRoutes.addIP(new CIDRIP(dns, 32), SecondVPN.isEnableCustomDNS());
-                        mRoutes.addIP(new CIDRIP(dns, 32), true);
+                        //mRoutes.addIP(new CIDRIP(dns, 32), true);
                     }
-
-
                 } catch (IllegalArgumentException iae) {
-                    if (!isBypass){
-                        addLog(String.format("DNS error: %s, %s", dns, iae.getLocalizedMessage()));
+                    if (!isBypass) {
+                        AppLogManager.addLog(
+                                String.format(
+                                        "DNS error: <br> %s, %s",
+                                        dns,
+                                        iae.getLocalizedMessage()
+                                )
+                        );
                     }
-
-
                 }
             }
 
@@ -1835,9 +1802,7 @@ public class TunnelManager extends VpnService implements Runnable, ConnectionMon
                 try {
                     if (multicastRange.containsNet(route)) {
                         ////AppLogManager.logDebug("VPN: Ignorando rota multicast: " + route.toString());
-                    }
-
-                    else{
+                    } else {
                         builder.addRoute(route.getIPv4Address(), route.networkMask);
                     }
 
@@ -1854,41 +1819,42 @@ public class TunnelManager extends VpnService implements Runnable, ConnectionMon
                 }
             }
 
-           try{
-               String checkV6 = TextUtils.join(", ", mRoutesv6.getNetworks(false));
-               if (SecondVPN.getIsCustomFileIsLocked()){
+            try {
+                String checkV6 = TextUtils.join(", ", mRoutesv6.getNetworks(false));
+                if (SecondVPN.getIsCustomFileIsLocked()) {
                     addLog("Routes: " + TextUtils.join(", ", mRoutes.getNetworks(true)).replaceFirst(TunnelManager.currentIPAddr, "*"));
                     addLog("Routes excluded (IPv4): " + TextUtils.join(", ", mRoutes.getNetworks(false)).replaceFirst(TunnelManager.currentIPAddr, "*"));
-                    if (checkV6 != ""){
+                    if (checkV6 != "") {
                         addLog("Routes excluded (IPv6): " + TextUtils.join(", ", mRoutesv6.getNetworks(false)).replaceFirst(TunnelManager.currentIPAddr, "*"));
                     }
-                }else{
+                } else {
                     addLog("Routes: " + TextUtils.join(", ", mRoutes.getNetworks(true)));
                     addLog("Routes excluded (IPv4): " + TextUtils.join(", ", mRoutes.getNetworks(false)));
-                    if (checkV6 != ""){
-                       addLog("Routes excluded (IPv6):" + TextUtils.join(", ", mRoutesv6.getNetworks(false)));
+                    if (checkV6 != "") {
+                        addLog("Routes excluded (IPv6):" + TextUtils.join(", ", mRoutesv6.getNetworks(false)));
                     }
 
                 }
             } catch (Exception e) {
                 e.printStackTrace();
             }
-           // addLog("Routes installed: " + TextUtils.join(", ", positiveIPv4Routes));
+            // addLog("Routes installed: " + TextUtils.join(", ", positiveIPv4Routes));
 
-            if (!isBypass){
-                if (SecondVPN.isEnableTethering()){
+            if (!isBypass) {
+                if (SecondVPN.isEnableTethering()) {
                     StartTethering();
                 }
 
             }
 
-            if (isBypass){
+            if (isBypass) {
                 builder.addDisallowedApplication(mContext.getPackageName());
             }
 
-            if (!isBypass && isIpv6){
+            if (!isBypass && isIpv6) {
                 //builder.addDisallowedApplication(mContext.getPackageName());
             }
+
 
             tunFd = builder
                     .setSession(getApplicationName())
@@ -1896,26 +1862,22 @@ public class TunnelManager extends VpnService implements Runnable, ConnectionMon
                     .establish();
 
 
+            String m_socksServerAddress = String.format("127.0.0.1:%s", 1080);
+            String m_udpResolver = SecondVPN.isEnableCustomUDP() ? SecondVPN.getUDPResolver() : null;
 
-            String m_socksServerAddress = String.format("127.0.0.1:%s", 9091);
-            String m_udpResolver =SecondVPN.isEnableCustomUDP() ? SecondVPN.getUDPResolver() : null;
-            if (m_udpResolver == null){
-                m_udpResolver = "127.0.0.1:7300";
+            if (m_udpResolver != null && !m_udpResolver.matches("^\\d{1,3}(\\.\\d{1,3}){3}:\\d+$")) {
+                m_udpResolver = null;
             }
-            //connectTunnel(true, m_socksServerAddress, m_udpResolver, true);
 
-            connectTunnel(SecondVPN.isEnableCustomDNS(), m_socksServerAddress, m_udpResolver, true);
+            connectTunnel(
+                    m_socksServerAddress,
+                    m_udpResolver
+            );
+
             mRoutes.clear();
 
-            //VPN OK
-           // addLog("<b><font color=#49C53C>" + mContext.getString(R.string.vpn_estabilished) +"</font></b>");
-
-
-
             return tunFd != null;
-        }
-        catch (Exception e)
-        {
+        } catch (Exception e) {
             addLog("Failed to establish the VPN " + e);
             return false;
         }
@@ -1923,110 +1885,133 @@ public class TunnelManager extends VpnService implements Runnable, ConnectionMon
 
     private static final String VPN_INTERFACE_NETMASK = "255.255.255.0";
     private static final int DNS_RESOLVER_PORT = 53;
-    boolean transparentDns = false;
-    public synchronized void connectTunnel(final boolean forwardDns, final String socksServerAddress, final String udpServerAddress, final boolean remoteUdpForwardingEnabled)
-    {
-        if (socksServerAddress == null)
-        {
+    boolean transparentDns = !SecondVPN.isEnableCustomDNS();
+
+    public synchronized void connectTunnel(
+            final String socksServerAddress,
+            String m_udpResolver
+
+    ) {
+        if (socksServerAddress == null) {
             throw new IllegalArgumentException("Must provide an IP address to a SOCKS server.");
         }
-        if (tunFd == null)
-        {
+        if (tunFd == null) {
             throw new IllegalStateException("Must establish the VPN before connecting the tunnel.");
         }
-        if (tun2socksThread != null)
-        {
+        if (tun2socksThread != null) {
             throw new IllegalStateException("Tunnel already connected");
         }
 
         isRunning = true;
 
-        String dnsgwRelay = null;
-        if (forwardDns) {
-            int pdnsdPort = VpnUtils.findAvailablePort(9092, 10);
-
-            String[] mServidorDNS = m_dnsResolvers;
-
-            dnsgwRelay = String.format("%s:%d", mPrivateAddress.mIpAddress, pdnsdPort);
-
-            mPdnsd = new Pdnsd(mContext, mServidorDNS, DNS_RESOLVER_PORT,
-                    mPrivateAddress.mIpAddress, pdnsdPort);
-            String finalDnsgwRelay = dnsgwRelay;
-            mPdnsd.setOnPdnsdListener(new Pdnsd.OnPdnsdListener(){
-                @Override
-                public void onStart(){
-                    if (!bypassToInject){
-                        addLog("DNS relay: " + finalDnsgwRelay);
-                    }
-                    //addLog("pdnsd started");
-                }
-                @Override
-                public void onStop(){
-                    //addLog("pdnsd stopped");
-                    //stop();
-                }
-            });
-
-            mPdnsd.start();
+        if (isBypass) {
+            return;
         }
 
+        String dnsgwRelay;
+        int pdnsdPort = VpnUtils.findAvailablePort(8091, 10);
+
+        String[] mServidorDNS = m_dnsResolvers;
+
+        dnsgwRelay =
+                String.format("%s:%d", mPrivateAddress.mIpAddress, pdnsdPort);
+
+        mPdnsd =
+                new Pdnsd(
+                        mContext,
+                        mServidorDNS,
+                        DNS_RESOLVER_PORT,
+                        mPrivateAddress.mIpAddress,
+                        pdnsdPort
+                );
+        String finalDnsgwRelay = dnsgwRelay;
+        mPdnsd.setOnPdnsdListener(
+                new Pdnsd.OnPdnsdListener() {
+                    @Override
+                    public void onStart() {
+                        if (!isBypass) {
+                            AppLogManager.addLog("DNS relay: " + finalDnsgwRelay);
+
+                        }
+                        //addLog("pdnsd started");
+                    }
+
+                    @Override
+                    public void onStop() {
+                        //addLog("pdnsd stopped");
+                        //stop();
+                    }
+                }
+        );
+
+        mPdnsd.start();
 
         // Tun2socks
-        mTun2Socks = new Tun2Socks(mContext, tunFd, mMtu,
-                mPrivateAddress.mRouter, VPN_INTERFACE_NETMASK, socksServerAddress,
-                SecondVPN.getUDPResolver(), dnsgwRelay, transparentDns);
+        mTun2Socks =
+                new Tun2Socks(
+                        mContext,
+                        tunFd,
+                        mMtu,
+                        mPrivateAddress.mRouter,
+                        VPN_INTERFACE_NETMASK,
+                        socksServerAddress,
+                        m_udpResolver,
+                        dnsgwRelay,
+                        transparentDns
+                );
 
-        mTun2Socks.setOnTun2SocksListener(new Tun2Socks.OnTun2SocksListener(){
-            @Override
-            public void onStart()
-            {
-                if (!bypassToInject){
-                    addLog("Socks local: " + socksServerAddress);
+        mTun2Socks.setOnTun2SocksListener(
+                new Tun2Socks.OnTun2SocksListener() {
+                    @Override
+                    public void onStart() {
+                        if (!isBypass) {
+                            AppLogManager.addLog("Socks local: " + socksServerAddress);
+                        }
+                    }
+
+                    @Override
+                    public void onStop() {
+                        //addLog("tun2socks stopped");
+                        //stop();
+                    }
                 }
-                //addLog("tun2socks started");
-            }
-            @Override
-            public void onStop()
-            {
-                //addLog("tun2socks stopped");
-                //stop();
-            }
-        });
+        );
 
         mTun2Socks.start();
 
         //EXIBE DNS DA REDE
-        if (!isBypass){
-            try{
+        if (!isBypass) {
+            try {
                 Thread.sleep(1000);
             } catch (Exception e) {
                 e.printStackTrace();
             }
-
-            //DNS
-            showCurrentDNS();
-
         }
 
         //VPN OK
-        addLog("<b><font color=#49C53C>" + mContext.getString(R.string.vpn_estabilished) +"</font></b>");
+        if (!isBypass) {
+            addLog("<b><font color=#49C53C>Tunnel VPN Conectado!</font></b>");
+            showCurrentDNS();
+        }
 
     }
+
     //
     /* Disconnects a tunnel created by a previous call to |connectTunnel|. */
     private boolean tunFdDestroyLog = false;
+
     public synchronized void disconnectTunnel() {
-       //DELAY DESTRUIR TUNNEL
-       try{
+        //DELAY DESTRUIR TUNNEL
+        try {
             Thread.sleep(300); //300 original
         } catch (Exception e) {
             e.printStackTrace();
         }
 
-        try{
-            if (!tunFdDestroyLog){
-                if (!vpnDestroyedLog){
-                    AppLogManager.addLog("<strong>"+ mContext.getString(R.string.vpn_destroyed) +"</strong>");
+        try {
+            if (!tunFdDestroyLog) {
+                if (!vpnDestroyedLog) {
+                    AppLogManager.addLog("<strong>" + mContext.getString(R.string.vpn_destroyed) + "</strong>");
                     vpnDestroyedLog = true;
                 }
 
@@ -2040,7 +2025,7 @@ public class TunnelManager extends VpnService implements Runnable, ConnectionMon
             e.printStackTrace();
         }
 
-        try{
+        try {
             if (mTun2Socks != null && mTun2Socks.isAlive()) {
                 mTun2Socks.interrupt();
             }
@@ -2057,25 +2042,20 @@ public class TunnelManager extends VpnService implements Runnable, ConnectionMon
             e.printStackTrace();
         }
 
-        if (pdnsdProcess != null)
-        {
+        if (pdnsdProcess != null) {
             pdnsdProcess.destroy();
             pdnsdProcess = null;
             //addLog("pdnsd stopped");
         }
 
-        try
-        {
-            if (tun2socksThread != null)
-            {
+        try {
+            if (tun2socksThread != null) {
                 //  Tun2Socks.Stop();
                 tun2socksThread.join();
                 tun2socksThread = null;
                 //addLog("tun2socks stopped");
             }
-        }
-        catch (InterruptedException e)
-        {
+        } catch (InterruptedException e) {
             Thread.currentThread().interrupt();
         }
 
@@ -2083,83 +2063,45 @@ public class TunnelManager extends VpnService implements Runnable, ConnectionMon
 
     }
 
-    public static String b(Context context, int i)
-    {
+    public static String b(Context context, int i) {
         Scanner useDelimiter = new Scanner(context.getResources().openRawResource(i), "UTF-8").useDelimiter("\\A");
         StringBuilder stringBuilder = new StringBuilder();
-        while (useDelimiter.hasNext())
-        {
+        while (useDelimiter.hasNext()) {
             stringBuilder.append(useDelimiter.next());
         }
         useDelimiter.close();
         return stringBuilder.toString();
     }
 
-    private void allowAllAFFamilies(VpnService.Builder builder)
-    {
+    private void allowAllAFFamilies(VpnService.Builder builder) {
 
         builder.allowFamily(OsConstants.AF_INET);
         builder.allowFamily(OsConstants.AF_INET6);
     }
 
-    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
-    private void setAllowedVpnPackages(VpnService.Builder builder)
-    {
-        Set<String> hs = SecondVPN.app_prefs.getStringSet("mAllowedAppsVpn", new HashSet<>());
-        boolean atLeastOneAllowedApp = false;
-        for (String pkg : hs)
-        {
-            try
-            {
-                if (SecondVPN.app_prefs.getBoolean("mAllowedAppsVpnAreDisallowed", true))
-                {
-                    if (!pkg.equals(mContext.getPackageName())){
-                        builder.addDisallowedApplication(pkg);
-                    }
-                }
-                else
-                {
-                    //VER SE NÃO VAI BUGAR
-                    if (!pkg.equals(mContext.getPackageName())){
-                        builder.addAllowedApplication(pkg);
-                    }
 
-                    atLeastOneAllowedApp = true;
+    /**
+     * author: staffnetDev git
+     * This method configures the VPN service by setting the allowed VPN packages.
+     * It adds the packages that are disallowed from using the VPN.
+     *
+     * @param builder The VpnService.Builder instance used to configure the VPN.
+     * @see #setAllowedVpnPackages(VpnService.Builder)
+     */
+    private void setAllowedVpnPackages(VpnService.Builder builder) {
+        Set<String> excludedApps;
+        excludedApps = SecondVPN.app_prefs.getStringSet("selectedApps", new HashSet<>());
+
+        for (int i = 0; i < excludedApps.size(); i++) {
+            try {
+                if (!excludedApps.toArray()[i].toString().equals(mContext.getPackageName())) {
+                    builder.addDisallowedApplication(excludedApps.toArray()[i].toString());
                 }
-            }
-            catch (PackageManager.NameNotFoundException e)
-            {
-                //mProfile.mAllowedAppsVpn.remove(pkg);
-                AppLogManager.addLog("<strong></font><font color=red>"+ mContext.getString(R.string.app_no_longer_exists) + " </strong>"+ pkg);
+            } catch (PackageManager.NameNotFoundException e) {
+                // Log the error if the package name is not found
+                AppLogManager.addLog("<strong></font><font color=red>" + mContext.getString(R.string.app_no_longer_exists) + " </strong>" + excludedApps.toArray()[i].toString());
             }
         }
-        if (!SecondVPN.app_prefs.getBoolean("mAllowedAppsVpnAreDisallowed", true) && !atLeastOneAllowedApp)
-        {
-            //DESATIVA PQ TÁ BUGANDO
-			AppLogManager.addLog(mContext.getString(R.string.no_allowed_app));
-			try
-			{
-				builder.addAllowedApplication(mContext.getPackageName());
-			}
-			catch (PackageManager.NameNotFoundException e)
-			{
-				AppLogManager.addLog("<strong></font><font color=red>This should not happen: " + e.getLocalizedMessage() + "</strong>" );
-			}
-        }
-        try{
-            if (!SecondVPN.app_prefs.getStringSet("mAllowedAppsVpn", new HashSet()).toString().replace("[","").replace("]","").isEmpty()){
-                if (SecondVPN.app_prefs.getBoolean("mAllowedAppsVpnAreDisallowed", true)) {
-                    AppLogManager.addLog("<strong></font><font color=red>" +mContext.getString(R.string.vpn_excluded_apps) + "</strong><br><br>"  + TextUtils.join(", ", SecondVPN.app_prefs.getStringSet("mAllowedAppsVpn", new HashSet())) + "<br>");
-                }else{
-                    AppLogManager.addLog("<strong></font><font color=red>"+mContext.getString(R.string.vpn_added_apps) + "</strong><br><br>" + TextUtils.join(", ", SecondVPN.app_prefs.getStringSet("mAllowedAppsVpn", new HashSet()))+ "<br>");
-                }
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-
-
     }
 
     private List<String> getNetworkDnsServer(Context context, boolean dnskey, String dns1, String dns2) {
@@ -2195,7 +2137,7 @@ public class TunnelManager extends VpnService implements Runnable, ConnectionMon
                 }
 
                 // remove ipv6 ips
-                if (dnsResolver.contains(":")){
+                if (dnsResolver.contains(":")) {
                     continue;
                 }
 
@@ -2206,8 +2148,7 @@ public class TunnelManager extends VpnService implements Runnable, ConnectionMon
             }
 
             return lista;
-        }
-        else throw new Exception("no active network DNS resolver");
+        } else throw new Exception("no active network DNS resolver");
     }
 
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
@@ -2220,20 +2161,20 @@ public class TunnelManager extends VpnService implements Runnable, ConnectionMon
             // - only available in Android 4.0+
             // - no guarantee will be available beyond 4.2, or on all vendor devices
             ConnectivityManager connectivityManager =
-                    (ConnectivityManager)context.getSystemService(Context.CONNECTIVITY_SERVICE);
+                    (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
             Class<?> LinkPropertiesClass = Class.forName("android.net.LinkProperties");
-            Method getActiveLinkPropertiesMethod = ConnectivityManager.class.getMethod("getActiveLinkProperties", new Class []{});
+            Method getActiveLinkPropertiesMethod = ConnectivityManager.class.getMethod("getActiveLinkProperties", new Class[]{});
             Object linkProperties = getActiveLinkPropertiesMethod.invoke(connectivityManager);
             if (linkProperties != null) {
                 if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
-                    Method getDnsesMethod = LinkPropertiesClass.getMethod("getDnses", new Class []{});
-                    Collection<?> dnses = (Collection<?>)getDnsesMethod.invoke(linkProperties);
+                    Method getDnsesMethod = LinkPropertiesClass.getMethod("getDnses", new Class[]{});
+                    Collection<?> dnses = (Collection<?>) getDnsesMethod.invoke(linkProperties);
                     for (Object dns : dnses) {
-                        dnsAddresses.add((InetAddress)dns);
+                        dnsAddresses.add((InetAddress) dns);
                     }
                 } else {
                     // LinkProperties is public in API 21 (and the DNS function signature has changed)
-                    for (InetAddress dns : ((LinkProperties)linkProperties).getDnsServers()) {
+                    for (InetAddress dns : ((LinkProperties) linkProperties).getDnsServers()) {
                         dnsAddresses.add(dns);
                     }
                 }
@@ -2256,15 +2197,12 @@ public class TunnelManager extends VpnService implements Runnable, ConnectionMon
     }
 
 
-
-    public synchronized String getLocalServerAddress(String port) throws IllegalStateException
-    {
+    public synchronized String getLocalServerAddress(String port) throws IllegalStateException {
         return String.format(Locale.ROOT, "%s:%s", LOCAL_SERVER_ADDRESS, port);
     }
 
-    void addLog(String msg)
-    {
-        if (!isBypass){
+    void addLog(String msg) {
+        if (!isBypass) {
             AppLogManager.addLog(msg);
         }
 
@@ -2275,8 +2213,6 @@ public class TunnelManager extends VpnService implements Runnable, ConnectionMon
         ApplicationInfo appInfo = packageManager.getApplicationInfo(mContext.getPackageName(), 0);
         return (String) packageManager.getApplicationLabel(appInfo);
     }
-
-
 
 
 }

@@ -56,6 +56,16 @@ public class Tun2Socks extends Thread implements StreamGobbler.OnLineListener {
 	@Override
 	public void run() {
 
+		System.out.println("Tun2Socks: Iniciando Tun2Socks");
+		System.out.println("Tun2Socks: vpnInterfaceFileDescriptor: " + mVpnInterfaceFileDescriptor);
+		System.out.println("Tun2Socks: vpnInterfaceMTU: " + mVpnInterfaceMTU);
+		System.out.println("Tun2Socks: vpnIpAddress: " + mVpnIpAddress);
+		System.out.println("Tun2Socks: vpnNetMask: " + mVpnNetMask);
+		System.out.println("Tun2Socks: socksServerAddress: " + mSocksServerAddress);
+		System.out.println("Tun2Socks: udpgwServerAddress: " + mUdpgwServerAddress);
+		System.out.println("Tun2Socks: dnsResolverAddress: " + mDnsResolverAddress);
+		System.out.println("Tun2Socks: udpgwTransparentDNS: " + mUdpgwTransparentDNS);
+
 		if (mListener != null) {
 			mListener.onStart();
 		}

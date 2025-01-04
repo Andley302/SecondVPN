@@ -9,13 +9,17 @@ import com.google.android.gms.ads.MobileAds;
 import com.google.android.gms.ads.initialization.InitializationStatus;
 import com.google.android.gms.ads.initialization.OnInitializationCompleteListener;
 
+import app.one.secondvpnlite.util.SharedPref;
+
 
 public class SecondVPN extends Application {
     private static final String TAG = SecondVPN.class.getSimpleName();
     public static final String PREFS_GERAL = "SECONDVPN_PREFS";
     public static final String FIRST_START = "FIRST_START_PREFS";
 
-    public static SharedPreferences app_prefs;
+    public static SharedPref app_prefs;
+
+
 
     public static AppOpenManager appOpenManager;
 
@@ -114,7 +118,7 @@ public class SecondVPN extends Application {
     }
 
     public static void setCurrentVpnStatus (String status){
-        app_prefs.edit().putString("LAST_VPN_STATUS",status).apply();
+        app_prefs.putString("LAST_VPN_STATUS",status);
     }
 
     public static boolean getLastA(){
@@ -122,13 +126,13 @@ public class SecondVPN extends Application {
     }
 
     public static void setDefaultPrefs(){
-        app_prefs.edit().clear().apply();
-        app_prefs.edit().putString("CONNECTION_MODE","MODO_HTTP").apply();
-        app_prefs.edit().putBoolean("IS_HTTP_DIRECT",true).apply();
-        app_prefs.edit().putBoolean("LAST_A",false).apply();
-        app_prefs.edit().putBoolean("PAYLOAD_AFTER_TLS",false).apply();
-        app_prefs.edit().putBoolean("IS_CUSTOM_FILE_LOCKED",false).apply();
-        app_prefs.edit().putString("LAST_VPN_STATUS","DESCONECTADO").apply();
+        app_prefs.clear();
+        app_prefs.putString("CONNECTION_MODE","MODO_HTTP");
+        app_prefs.putBoolean("IS_HTTP_DIRECT",true);
+        app_prefs.putBoolean("LAST_A",false);
+        app_prefs.putBoolean("PAYLOAD_AFTER_TLS",false);
+        app_prefs.putBoolean("IS_CUSTOM_FILE_LOCKED",false);
+        app_prefs.putString("LAST_VPN_STATUS","DESCONECTADO");
 
     }
 
@@ -136,7 +140,7 @@ public class SecondVPN extends Application {
     public void onCreate()
     {
         super.onCreate();
-        app_prefs = getSharedPreferences(SecondVPN.PREFS_GERAL, Context.MODE_PRIVATE);
+        app_prefs  = SharedPref.getInstance(this);
 
         MobileAds.initialize(
                 this,

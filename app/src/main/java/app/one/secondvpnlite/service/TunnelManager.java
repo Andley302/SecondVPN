@@ -1627,23 +1627,68 @@ public class TunnelManager extends VpnService implements Runnable, ConnectionMon
             mRoutes.addIP(new CIDRIP("10.0.0.0", 8), false);
 
             mRoutes.addIP(new CIDRIP(mPrivateAddress.mSubnet, mPrivateAddress.mPrefixLength), true);
+
+            /**
+            * @param  GetIPV6Mask(hostString)
+             * @see  hostString
+             *author: staffnetDev github
+             *The provided code snippet checks if the hostString contains a colon (:), which indicates that it is an IPv6 address. If it is an IPv6 address, it initializes Inet6Address and Inet4Address variables to null. It then iterates over all the addresses returned by InetAddress.getAllByName(hostString) and assigns the appropriate address to either ipv6 or ipv4.
+             * If an IPv4 address is found (ipv4 is not null), it adds this address to the mRoutes with a subnet mask of 32.
+             * If an IPv6 address is found (ipv6 is not null), it calculates the mask using the GetIPV6Mask method if the hostString contains a subnet mask, otherwise, it defaults to 128. It then adds this IPv6 address to mRoutesv6.
+             * If the hostString does not contain a colon, it is
+            * */
             if (!isBypass) {
-                mRoutes.addIP(new CIDRIP(TunnelManager.currentIPAddr, 32), false);
+                String hostString = TunnelManager.currentIPAddr;
+
+
+                if(hostString.contains(":")) {
+
+                    Inet6Address ipv6 = null;
+                    Inet4Address ipv4 = null;
+
+                    for(InetAddress addr : InetAddress.getAllByName(hostString)) {
+                        if(addr instanceof Inet6Address)
+                            ipv6 = (Inet6Address)addr;
+                        if(addr instanceof Inet4Address)
+                            ipv4 = (Inet4Address)addr;
+                    }
+
+                    if (ipv4 != null) {
+                        mRoutes.addIP(new CIDRIP(ipv4.getHostAddress(), 32), false);
+                    }
+
+
+                    if (ipv6 !=null){
+                        int mask = (hostString.contains("/")) ? GetIPV6Mask(hostString)  : 128;
+                        mRoutesv6.addIPv6(ipv6, mask, true);
+                    }
+
+                }else
+
+                    mRoutes.addIP(new CIDRIP(hostString, 32), false);
+
+
             } else {
                 mRoutes.addIP(new CIDRIP("192.198.0.1", 32), false);
             }
+
+
             //Commented because no data is generated when connecting to the VPN
+
+
+
+
+
 
             boolean allowUnsetAF = Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP;
 
 
 
             if (allowUnsetAF) {
-
                 /**
-                * Disable this code to allow all traffic to pass through the VPN
+                 * Disable this code to allow all traffic to pass through the VPN
                  * @param allowAllAFFamilies(builder);
-                * */
+                 * */
                 if (!isBypass) {
                     setAllowedVpnPackages(builder);
                 }
@@ -1928,6 +1973,7 @@ public class TunnelManager extends VpnService implements Runnable, ConnectionMon
                         mPrivateAddress.mIpAddress,
                         pdnsdPort
                 );
+
         String finalDnsgwRelay = dnsgwRelay;
         mPdnsd.setOnPdnsdListener(
                 new Pdnsd.OnPdnsdListener() {
@@ -2218,5 +2264,14 @@ public class TunnelManager extends VpnService implements Runnable, ConnectionMon
         return (String) packageManager.getApplicationLabel(appInfo);
     }
 
+    private int GetIPV6Mask(String cidr){
+        if (cidr.contains("/")) {
+            int index = cidr.indexOf("/");
+            String networkPart = cidr.substring(index + 1);
+            return Integer.parseInt(networkPart);
+        } else {
+            throw new IllegalArgumentException("not an valid CIDR format!");
+        }
+    }
 
 }

@@ -187,5 +187,6 @@
     <string name="only_play_store">Instalação não-oficial bloqueada!</string>
     <string name="show_logs_start">Exibir logs ao iniciar</string>
     <string name="starting_tunnel_service">Iniciando serviço de tunnel...</string>
+    <string name="splittunneling" >Todos os aplicativos rodam por meio de conexão VPN\n criptografada. Se você quiser excluir qualquer\n aplicativo, toque no botão à direita.</string>
 
 </resources>

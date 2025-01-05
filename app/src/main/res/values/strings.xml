@@ -184,4 +184,5 @@
     <string name="only_play_store">Unofficial installation blocked!</string>
     <string name="show_logs_start">Show logs on start</string>
     <string name="starting_tunnel_service">Starting tunnel service...</string>
+    <string name="splittunneling" >All apps run through encrypted VPN\n connection. If you want to exclude any\n app, tap the button on right.</string>
 </resources>

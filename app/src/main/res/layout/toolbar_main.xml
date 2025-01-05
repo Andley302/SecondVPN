@@ -13,6 +13,28 @@
 		android:elevation="4dp"
 		android:theme="@style/ThemeOverlay.AppCompat.Dark"
 		app:popupTheme="@style/ThemeOverlay.AppCompat.Dark">
+
+
+		<ImageView
+			android:id="@+id/btnBack"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:padding="15dp"
+			android:visibility="gone"
+			android:rotation="180"
+			android:src="@drawable/arrow_card" />
+
+		<TextView
+			android:id="@+id/toolbar_title"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:layout_gravity="center_vertical|center_horizontal"
+			android:text="Activity Name"
+			android:visibility="gone"
+			android:textColor="@color/white"
+			android:textSize="16sp" />
+
+
 	</androidx.appcompat.widget.Toolbar>
 
 </com.google.android.material.appbar.AppBarLayout>

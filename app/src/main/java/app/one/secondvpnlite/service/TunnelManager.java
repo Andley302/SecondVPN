@@ -1639,7 +1639,11 @@ public class TunnelManager extends VpnService implements Runnable, ConnectionMon
 
 
             if (allowUnsetAF) {
-                allowAllAFFamilies(builder);
+
+                /**
+                * Disable this code to allow all traffic to pass through the VPN
+                 * @param allowAllAFFamilies(builder);
+                * */
                 if (!isBypass) {
                     setAllowedVpnPackages(builder);
                 }

@@ -18,6 +18,8 @@
         android:orientation="vertical"
         tools:ignore="MissingClass">
 
+        <!--ca-app-pub-3940256099942544/6300978111-->
+        <!--ca-app-pub-2955918284006466/5236078879-->
         <com.google.android.gms.ads.AdView
             xmlns:ads="http://schemas.android.com/apk/res-auto"
             android:id="@+id/adView"

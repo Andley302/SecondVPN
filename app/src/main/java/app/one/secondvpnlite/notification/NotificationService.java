@@ -69,14 +69,17 @@ public class NotificationService extends Service {
             //	bigText.setSummaryText("Velocidade da rede");
             bigText.bigText(body);
 
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            pendingIntent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_IMMUTABLE);
+            mBuilder.setContentIntent(pendingIntent);
+
+            /*if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                 pendingIntent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_IMMUTABLE);
                 mBuilder.setContentIntent(pendingIntent);
 
             } else {
                 pendingIntent = PendingIntent.getActivity(this, 0, intent, 0);
                 mBuilder.setContentIntent(pendingIntent);
-            }
+            }*/
 
             mBuilder.setSmallIcon(R.drawable.ic_notification) ;// required
             mBuilder.setContentTitle(title);
@@ -161,12 +164,14 @@ public class NotificationService extends Service {
                     intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
                 }
 
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                pendingIntent =  PendingIntent.getActivity(this, 0, intent,  PendingIntent.FLAG_IMMUTABLE);
+
+                /*if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                     pendingIntent =  PendingIntent.getActivity(this, 0, intent,  PendingIntent.FLAG_IMMUTABLE);
 
                 } else {
                     pendingIntent = PendingIntent.getActivity(this, 0, intent, 0);
-                }
+                }*/
 
                 builder.setContentTitle(title)  // required
                         //.setSmallIcon(android.R.drawable.ic_popup_reminder) // required
@@ -188,12 +193,14 @@ public class NotificationService extends Service {
                     intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
                 }
 
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                pendingIntent =  PendingIntent.getActivity(this, 0, intent,  PendingIntent.FLAG_IMMUTABLE);
+
+                /*if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                     pendingIntent =  PendingIntent.getActivity(this, 0, intent,  PendingIntent.FLAG_IMMUTABLE);
 
                 } else {
                     pendingIntent = PendingIntent.getActivity(this, 0, intent, 0);
-                }
+                }*/
 
                 builder.setContentTitle(title)                           // required
                         //.setSmallIcon(android.R.drawable.ic_popup_reminder) // required

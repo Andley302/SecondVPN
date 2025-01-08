@@ -30,3 +30,8 @@
 -keep class com.android.org.conscrypt.** { *;}
 -keep class org.apache.harmony.xnet.provider.** { *;}
 -keep class sun.security.x509.** { *;}
+-dontwarn android.media.LoudnessCodecController$OnLoudnessCodecUpdateListener
+-dontwarn android.media.LoudnessCodecController
+-dontwarn com.android.org.conscrypt.SSLParametersImpl
+-dontwarn org.apache.harmony.xnet.provider.jsse.SSLParametersImpl
+-dontwarn sun.security.x509.X509Key

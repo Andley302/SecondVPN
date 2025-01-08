@@ -1684,10 +1684,6 @@ public class TunnelManager extends VpnService implements Runnable, ConnectionMon
             //Commented because no data is generated when connecting to the VPN
 
 
-
-
-
-
             boolean allowUnsetAF = Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP;
 
 
@@ -1876,25 +1872,29 @@ public class TunnelManager extends VpnService implements Runnable, ConnectionMon
                 }
             }
 
-            try {
-                String checkV6 = TextUtils.join(", ", mRoutesv6.getNetworks(false));
-                if (SecondVPN.getIsCustomFileIsLocked()) {
-                    addLog("Routes: " + TextUtils.join(", ", mRoutes.getNetworks(true)).replaceFirst(TunnelManager.currentIPAddr, "*"));
-                    addLog("Routes excluded (IPv4): " + TextUtils.join(", ", mRoutes.getNetworks(false)).replaceFirst(TunnelManager.currentIPAddr, "*"));
-                    if (checkV6 != "") {
-                        addLog("Routes excluded (IPv6): " + TextUtils.join(", ", mRoutesv6.getNetworks(false)).replaceFirst(TunnelManager.currentIPAddr, "*"));
-                    }
-                } else {
-                    addLog("Routes: " + TextUtils.join(", ", mRoutes.getNetworks(true)));
-                    addLog("Routes excluded (IPv4): " + TextUtils.join(", ", mRoutes.getNetworks(false)));
-                    if (checkV6 != "") {
-                        addLog("Routes excluded (IPv6):" + TextUtils.join(", ", mRoutesv6.getNetworks(false)));
-                    }
+            if (!isBypass) {
+                try {
+                    String checkV6 = TextUtils.join(", ", mRoutesv6.getNetworks(false));
+                    if (SecondVPN.getIsCustomFileIsLocked()) {
+                        addLog("Routes: " + TextUtils.join(", ", mRoutes.getNetworks(true)).replaceFirst(TunnelManager.currentIPAddr, "*"));
+                        addLog("Routes excluded (IPv4): " + TextUtils.join(", ", mRoutes.getNetworks(false)).replaceFirst(TunnelManager.currentIPAddr, "*"));
+                        if (checkV6 != "") {
+                            addLog("Routes excluded (IPv6): " + TextUtils.join(", ", mRoutesv6.getNetworks(false)).replaceFirst(TunnelManager.currentIPAddr, "*"));
+                        }
+                    } else {
+                        addLog("Routes: " + TextUtils.join(", ", mRoutes.getNetworks(true)));
+                        addLog("Routes excluded (IPv4): " + TextUtils.join(", ", mRoutes.getNetworks(false)));
+                        if (checkV6 != "") {
+                            addLog("Routes excluded (IPv6):" + TextUtils.join(", ", mRoutesv6.getNetworks(false)));
+                        }
 
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
                 }
-            } catch (Exception e) {
-                e.printStackTrace();
+
             }
+
             // addLog("Routes installed: " + TextUtils.join(", ", positiveIPv4Routes));
 
             if (!isBypass) {
@@ -2156,22 +2156,6 @@ public class TunnelManager extends VpnService implements Runnable, ConnectionMon
                 AppLogManager.addLog("<strong></font><font color=red>" + mContext.getString(R.string.app_no_longer_exists) + " </strong>" + excludedApps.toArray()[i].toString());
             }
         }
-    }
-
-    private List<String> getNetworkDnsServer(Context context, boolean dnskey, String dns1, String dns2) {
-        List<String> dnsResolver = new ArrayList<String>();
-        try {
-            if (dnskey) {
-                dnsResolver.add(dns1);
-                dnsResolver.add(dns2);
-            } else {
-                dnsResolver = getActiveNetworkDnsResolver(context);
-            }
-        } catch (Exception e) {
-            dnsResolver.add("8.8.8.8");
-            dnsResolver.add("8.8.4.4");
-        }
-        return dnsResolver;
     }
 
     private List<String> getActiveNetworkDnsResolver(Context context) throws Exception {

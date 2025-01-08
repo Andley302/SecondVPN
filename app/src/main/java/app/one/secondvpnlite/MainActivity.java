@@ -346,12 +346,8 @@ public class MainActivity extends AppCompatActivity implements DrawerLayout.Draw
         String ab = "ca-app";
         if (BuildConfig.DEBUG){
             ab = "ca-app-pub-3940256099942544/6300978111";
-            //TEST DEVICE
-            /*List<String> testDeviceIds = Arrays.asList("6B46F18CA2B1B469A8DDADC20E44E32D");
-            RequestConfiguration configuration =
-                    new RequestConfiguration.Builder().setTestDeviceIds(testDeviceIds).build();
-            MobileAds.setRequestConfiguration(configuration);*/
-
+        }else{
+            ab = "ca-app-pub-2955918284006466/5236078879";
         }
         adView.setAdUnitId(ab);
         // TODO: Add adView to your view hierarchy.
@@ -363,8 +359,9 @@ public class MainActivity extends AppCompatActivity implements DrawerLayout.Draw
 
         String ai = "ca-app";
         if (BuildConfig.DEBUG){
-           ai = "ca-app-pub-3940256099942544/1033173712";
-
+            ai = "ca-app-pub-3940256099942544/1033173712";
+        }else{
+            ai = "ca-app-pub-2955918284006466/2356432963";
         }
 
         //CARREGA INTERSTITIAL AD
@@ -387,7 +384,6 @@ public class MainActivity extends AppCompatActivity implements DrawerLayout.Draw
                     }
                 });
     }
-
 
     static int delay = 4000;
     static boolean isShowing = false;
@@ -916,16 +912,6 @@ public class MainActivity extends AppCompatActivity implements DrawerLayout.Draw
                         mTunnelThread = new Thread(mTunnelManager);
                         mTunnelThread.start();
 
-                        //DELAY BOTÃO INICIAR
-                       /* start_button.setEnabled(false);
-                        start_button.setBackgroundColor(Color.BLACK);
-                        new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
-                            @Override
-                            public void run() {
-                                start_button.setEnabled(true);
-                                start_button.setBackgroundColor(Color.WHITE);
-                            }
-                        }, 6000);*/
                     } catch (Exception e) {
                         e.printStackTrace();
                     }

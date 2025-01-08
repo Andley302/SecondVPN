@@ -1,7 +1,7 @@
 <resources>
 <string name="app_name">Second VPN - Lite</string>
     <string name="start_msg_title">Obrigado por usar a Second VPN - Lite</string>
-    <string name="start_msg_text">Por favor, esteja ciente de que esta ferramenta deve ser usada por pessoas com conhecimento sobre. Nós não somos responsáveis pelo mau uso dele. Saiba que este aplicativo ainda está em testes, bugs podem ocorrer!</string>
+    <string name="start_msg_text">Por favor, esteja ciente de que esta ferramenta deve ser usada por pessoas com conhecimento sobre. Nós não somos responsáveis pelo mau uso dele.</string>
     <string name="error_request_permission">Erro ao obter permissões</string>
     <string name="ok">OK</string>
     <string name="cancel">Cancelar</string>
@@ -188,5 +188,8 @@
     <string name="show_logs_start">Exibir logs ao iniciar</string>
     <string name="starting_tunnel_service">Iniciando serviço de tunnel...</string>
     <string name="splittunneling" >Todos os aplicativos rodam por meio de conexão VPN\n criptografada. Se você quiser excluir qualquer\n aplicativo, toque no botão à direita.</string>
+    <string name="unblock_all">Desbloquear Todos</string>
+    <string name="block_all">Bloquear Todos</string>
+    <string name="current_network">Rede:</string>
 
 </resources>

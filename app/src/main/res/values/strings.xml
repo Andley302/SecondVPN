@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">Second VPN - Lite</string>
     <string name="start_msg_title">Thank you for using Second VPN - Lite</string>
-    <string name="start_msg_text">Please be aware that this tool should be used by people with knowledge about. We are not responsible for my use of it. Know that this app is still in testing, bugs may occur!</string>
+    <string name="start_msg_text">Please be aware that this tool should be used by people with knowledge about.</string>
     <string name="error_request_permission">Error on getting permissions</string>
     <string name="ok">OK</string>
     <string name="cancel">Cancel</string>
@@ -185,4 +185,7 @@
     <string name="show_logs_start">Show logs on start</string>
     <string name="starting_tunnel_service">Starting tunnel service...</string>
     <string name="splittunneling" >All apps run through encrypted VPN\n connection. If you want to exclude any\n app, tap the button on right.</string>
+    <string name="unblock_all">Unblock All</string>
+    <string name="block_all">Block All</string>
+    <string name="current_network">Network:</string>
 </resources>

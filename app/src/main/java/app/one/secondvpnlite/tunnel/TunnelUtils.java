@@ -3,6 +3,8 @@ package app.one.secondvpnlite.tunnel;
 import android.content.*;
 import android.net.*;
 import android.os.Build;
+import android.telephony.SubscriptionManager;
+import android.telephony.TelephonyManager;
 import android.util.*;
 
 
@@ -13,6 +15,7 @@ import java.util.regex.*;
 
 import java.net.*;
 
+import app.one.secondvpnlite.MainActivity;
 import app.one.secondvpnlite.logs.AppLogManager;
 
 public class TunnelUtils
@@ -106,24 +109,6 @@ public class TunnelUtils
 			e.printStackTrace();
 		}
 		return ip;
-		/*try {
-			for (Enumeration<NetworkInterface> en = NetworkInterface
-					.getNetworkInterfaces(); en.hasMoreElements();) {
-				NetworkInterface intf = en.nextElement();
-				for (Enumeration<InetAddress> enumIpAddr = intf
-						.getInetAddresses(); enumIpAddr.hasMoreElements();) {
-					InetAddress inetAddress = enumIpAddr.nextElement();
-					if (!inetAddress.isLoopbackAddress() && inetAddress instanceof Inet4Address) {
-						String sAddr = inetAddress.getHostAddress();
-
-						return sAddr.toString();
-					}
-				}
-			}
-		} catch (SocketException ex) {
-			return "ERROR Obtaining IP";
-		}
-		return "No IP Available";*/
 	}
 
 	private static String d(String str) {
@@ -411,6 +396,64 @@ public class TunnelUtils
 
 	private static void addLog(String msg){
 		AppLogManager.addLog(msg);
+	}
+
+	public static String getAPN(Context ctx) {
+		try {
+			//OBTEM DNS LOCAL
+			final ConnectivityManager connMgr = (ConnectivityManager) ctx.getSystemService(
+					Context.CONNECTIVITY_SERVICE
+			);
+			for (Network network : connMgr.getAllNetworks()) {
+				NetworkInfo networkInfo = connMgr.getNetworkInfo(network);
+				if (networkInfo.getType() == ConnectivityManager.TYPE_WIFI) {
+					return "Wi-Fi";
+				}
+				if (networkInfo.getType() == ConnectivityManager.TYPE_MOBILE) {
+					try {
+						String apn = String.valueOf(networkInfo.getExtraInfo());
+						if (apn != null && !apn.contains("ims")) {
+							return apn;
+						}
+					} catch (Exception e) {
+						return "Unknown";
+					}
+				}
+			}
+		} catch (Exception e) {
+			return "Unknown";
+		}
+		return "Unknown";
+	}
+
+	public static String getOperatorName(Context ctx) {
+		try {
+			final ConnectivityManager connMgr = (ConnectivityManager) ctx.getSystemService(
+					Context.CONNECTIVITY_SERVICE
+			);
+			final android.net.NetworkInfo wifi = connMgr.getNetworkInfo(
+					ConnectivityManager.TYPE_WIFI
+			);
+			TelephonyManager tm = (TelephonyManager) ctx.getSystemService(
+					Context.TELEPHONY_SERVICE
+			);
+            assert wifi != null;
+            if (wifi.isConnectedOrConnecting()) {
+				return "Wi-Fi";
+			} else {
+				if (Build.VERSION.SDK_INT >= 24) {
+					tm =
+							tm.createForSubscriptionId(
+									SubscriptionManager.getDefaultDataSubscriptionId()
+							);
+					return String.valueOf(tm.getNetworkOperatorName());
+				} else {
+					return String.valueOf(tm.getNetworkOperatorName());
+				}
+			}
+		} catch (Exception e) {
+			return "Default";
+		}
 	}
 }
 

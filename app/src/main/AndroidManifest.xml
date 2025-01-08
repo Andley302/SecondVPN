@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    package="app.one.secondvpnlite">
+    xmlns:tools="http://schemas.android.com/tools">
 
     <uses-permission android:name="android.permission.INTERNET"/>
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
@@ -13,6 +12,7 @@
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS"/>
     <uses-permission android:name="android.permission.QUERY_ALL_PACKAGES"
         tools:ignore="QueryAllPackagesPermission" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_DATA_SYNC"/>
 
 
     <application
@@ -24,7 +24,8 @@
         android:supportsRtl="true"
         android:networkSecurityConfig="@xml/network_security_config"
         android:hardwareAccelerated="true"
-        android:theme="@style/Theme.SecondVPNLite">
+        android:theme="@style/Theme.SecondVPNLite"
+        tools:targetApi="n">
         <activity
             android:name=".MainActivity"
             android:exported="true">
@@ -125,6 +126,7 @@
             android:exported="true"
             android:enabled="true"
             android:permission="android.permission.BIND_VPN_SERVICE"
+            android:foregroundServiceType="dataSync"
             android:name=".service.TunnelManager">
             <intent-filter>
                 <action android:name="android.net.VpnService"/>
@@ -136,21 +138,23 @@
             android:stopWithTask="false"
             android:label="Second VPN Lite - Notification"
             android:name=".notification.NotificationService"
+            android:foregroundServiceType="dataSync"
             android:exported="false"
             android:enabled="true">
         </service>
 
 
         <service
+            android:permission="TODO"
             android:process=":TetheringServer"
             android:label="Second VPN - Tethering"
             android:name=".tethering.TetheringServer"
+            android:foregroundServiceType="dataSync"
             android:stopWithTask="false"
             android:exported="true"
             tools:ignore="Instantiatable">
         </service>
 
-        <!-- Sample AdMob app ID: ca-app-pub-3940256099942544~3347511713 -->
         <meta-data
             android:name="com.google.android.gms.ads.APPLICATION_ID"
             android:value="ca-app-pub-2955918284006466~1566095472"/>

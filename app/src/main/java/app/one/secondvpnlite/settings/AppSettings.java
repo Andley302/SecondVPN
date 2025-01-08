@@ -228,8 +228,7 @@ public class AppSettings extends AppCompatActivity implements View.OnClickListen
     public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
         if (!enable_udp.isChecked()){
             enable_dns.setChecked(true);
-            type_dns_1.setText("1.1.1.1");
-            type_dns_2.setText("1.0.0.1");
+
         }else if (enable_udp.isChecked() && type_udp.getText().toString().isEmpty()){
             type_udp.setText("127.0.0.1:7300");
         }
@@ -351,7 +350,6 @@ public class AppSettings extends AppCompatActivity implements View.OnClickListen
             app_prefs.edit().putBoolean("IS_SHOW_LOGS",false).apply();
         }
 
-
        /* if (enable_notifications.isChecked()){
             app_prefs.edit().putBoolean("IS_ENABLE_NOTIFICATION",true).apply();
             enable_notifications.setChecked(true);
@@ -383,8 +381,6 @@ public class AppSettings extends AppCompatActivity implements View.OnClickListen
         savePreferences(true);
         super.onPause();
     }
-
-
 
     @Override
     protected void onDestroy()

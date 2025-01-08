@@ -52,11 +52,6 @@ public class AppOpenManager implements LifecycleObserver,Application.ActivityLif
     /** LifecycleObserver methods */
     @OnLifecycleEvent(ON_START)
     public void onStart() {
-        //mostraria apenas se conectado, agora mostra toda hora fds
-        //if (SecondVPN.getCurrentVpnStatus().equals("CONECTADO")){
-        /*if (TunnelManager.isServiceRunning){
-          showAdIfAvailable();
-        }*/
         showAdIfAvailable();
 
     }
@@ -87,6 +82,8 @@ public class AppOpenManager implements LifecycleObserver,Application.ActivityLif
         String a = "ca-app";
         if (BuildConfig.DEBUG){
            a = "ca-app-pub-3940256099942544/3419835294";
+        }else{
+            a = "ca-app-pub-2955918284006466/1410839342";
         }
         AD_UNIT_ID = a;
 

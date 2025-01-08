@@ -53,7 +53,7 @@
 			android:layout_marginEnd="20dp"
 			android:layout_weight="1"
 			android:backgroundTint="#2196F3"
-			android:text="Block All"
+			android:text="@string/block_all"
 			android:textAllCaps="false"
 			android:textColor="@color/white" />
 
@@ -64,7 +64,7 @@
 			android:layout_marginStart="20dp"
 			android:layout_marginEnd="20dp"
 			android:layout_weight="1"
-			android:text="Unblock All"
+			android:text="@string/unblock_all"
 			android:textAllCaps="false"
 			android:backgroundTint="#2196F3"
 			android:textColor="@color/white"

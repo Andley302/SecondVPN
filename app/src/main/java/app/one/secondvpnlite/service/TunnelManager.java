@@ -1900,10 +1900,6 @@ public class TunnelManager extends VpnService implements Runnable, ConnectionMon
                 builder.addDisallowedApplication(mContext.getPackageName());
             }
 
-            if (!isBypass && isIpv6) {
-                //builder.addDisallowedApplication(mContext.getPackageName());
-            }
-
 
             tunFd = builder
                     .setSession(getApplicationName())

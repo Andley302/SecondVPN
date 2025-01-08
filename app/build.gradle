@@ -10,8 +10,8 @@ android {
         applicationId "app.one.secondvpnlite"
         minSdk 21
         targetSdk 35
-        versionCode 31
-        versionName "1.0.8"
+        versionCode 32
+        versionName "1.0.9"
         multiDexEnabled false
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"

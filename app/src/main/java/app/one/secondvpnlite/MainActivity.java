@@ -697,6 +697,7 @@ public class MainActivity extends AppCompatActivity implements DrawerLayout.Draw
 
     private void stopVPNService(){
         try{
+            TunnelManager.stopForwarderSocks();
             TunnelManager.isToStopService = true;
             mTunnelManager = new TunnelManager();
             mTunnelThread = new Thread(mTunnelManager);

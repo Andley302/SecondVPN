@@ -23,6 +23,8 @@ import java.net.InetSocketAddress;
 import com.trilead.ssh2.channel.ChannelManager;
 import com.trilead.ssh2.channel.DynamicAcceptThread;
 
+import app.one.secondvpnlite.logs.AppLogManager;
+
 /**
  * A <code>DynamicPortForwarder</code> forwards TCP/IP connections to a local
  * port via the secure tunnel to another host which is selected via the SOCKS
@@ -56,10 +58,11 @@ public class DynamicPortForwarder {
 
 	/**
 	 * Stop TCP/IP forwarding of newly arriving connections.
-	 * 
+	 *
 	 * @throws IOException
 	 */
 	public void close() throws IOException {
 		dat.stopWorking();
 	}
+
 }

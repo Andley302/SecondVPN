@@ -466,7 +466,9 @@ public class TunnelManager extends VpnService implements Runnable, ConnectionMon
             hostIP = a.getHostAddress();
             return hostIP;
         } catch (Exception e) {
-            AppLogManager.addLog("Unresolved host: " + e.toString().replace(hostIP, "*"));
+            //AppLogManager.addToLog("Unresolved host, continuing connection...");
+
+            //AppLogManager.addLog("Unresolved host: " + e.toString().replace(hostIP, "*"));
             return hostIP;
         }
     }
@@ -705,7 +707,7 @@ public class TunnelManager extends VpnService implements Runnable, ConnectionMon
 
     }
 
-    private DynamicPortForwarder dpf;
+    private static DynamicPortForwarder dpf;
 
     private synchronized void startForwarderSocks(int portaLocal) throws Exception {
         if (!mConnected) {
@@ -721,7 +723,7 @@ public class TunnelManager extends VpnService implements Runnable, ConnectionMon
         }
     }
 
-    private synchronized void stopForwarderSocks() {
+    public static synchronized void stopForwarderSocks() {
         if (dpf != null) {
             try {
                 dpf.close();
@@ -1931,7 +1933,7 @@ public class TunnelManager extends VpnService implements Runnable, ConnectionMon
 
             return tunFd != null;
         } catch (Exception e) {
-            addLog("Failed to establish the VPN " + e);
+            AppLogManager.addLog("Failed to establish the VPN " + e);
             return false;
         }
     }
